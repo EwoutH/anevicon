@@ -11,3 +11,7 @@ license = "gpl-3.0-only"
 edition = "2018"
 
 [dependencies]
+fern = { version = "0.5.7", features = ["colored"] }
+log = "0.4.6"
+time = "0.1.42"
+termion = "1.5.1"

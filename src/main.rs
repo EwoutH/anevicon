@@ -17,6 +17,40 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
+use std::io::stdout;
+
+use fern::colors::{Color, ColoredLevelConfig};
+use fern::Dispatch;
+use termion::color::{Cyan, Fg, Reset};
+use termion::style::{NoUnderline, Underline};
+use time::{self, strftime};
+
 fn main() {
-    println!("Hello, world!");
+    setup_logging();
+}
+
+fn setup_logging() {
+    let colors = ColoredLevelConfig::new()
+        .info(Color::Green)
+        .warn(Color::Yellow)
+        .error(Color::Red)
+        .debug(Color::Magenta)
+        .trace(Color::Cyan);
+
+    Dispatch::new()
+        .format(move |out, message, record| {
+            out.finish(format_args!(
+                "{underline}{level}{no_underline} [{cyan}{date_time}{no_cyan}]: {message}",
+                underline = Underline,
+                level = colors.color(record.level()),
+                no_underline = NoUnderline,
+                cyan = Fg(Cyan),
+                date_time = strftime("%x %X %z", &time::now()).unwrap(),
+                no_cyan = Fg(Reset),
+                message = message,
+            ))
+        })
+        .chain(stdout())
+        .apply()
+        .expect("Cannot correctly setup the logging system");
 }
