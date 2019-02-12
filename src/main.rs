@@ -1,4 +1,4 @@
-/* anevicon: An UDP-based server stress-testing tool, written in Rust
+/* anevicon: An UDP-based server stress-testing tool, written in Rust.
  * Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 
 use std::io::stdout;
 
+use clap::{App, Arg, ArgMatches};
 use fern::colors::{Color, ColoredLevelConfig};
 use fern::Dispatch;
 use termion::color::{Cyan, Fg, Reset};
@@ -26,7 +27,80 @@ use termion::style::{NoUnderline, Underline};
 use time::{self, strftime};
 
 fn main() {
+    setup_options();
     setup_logging();
+}
+
+fn setup_options<'a>() -> ArgMatches<'a> {
+    App::new("anevicon")
+        .author("Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>")
+        .about("An UDP-based server stress-testing tool, written in Rust.")
+        .version("0.1.0")
+        .set_term_width(80)
+        .arg(
+            Arg::with_name("receiver")
+                .short("r")
+                .long("receiver")
+                .takes_value(true)
+                .value_name("ADDRESS")
+                .required(true)
+                .help(
+                    "A receiver of generated traffic, specified as an IP-address \
+                     and a port number, separated by the colon character.",
+                ),
+        )
+        .arg(
+            Arg::with_name("sender")
+                .short("s")
+                .long("sender")
+                .takes_value(true)
+                .value_name("ADDRESS")
+                .default_value("0.0.0.0:0")
+                .help(
+                    "A sender of generated traffic, specified as an IP-address \
+                     and a port number, separated by the colon character.",
+                ),
+        )
+        .arg(
+            Arg::with_name("duration")
+                .short("d")
+                .long("duration")
+                .takes_value(true)
+                .value_name("TIME-SPAN")
+                .default_value("64years 64hours 64secs")
+                .help(
+                    "A program working time. The default value is too big, that \
+                     is, an attack will be performed until you explicitly stop \
+                     the process.",
+                ),
+        )
+        .arg(
+            Arg::with_name("length")
+                .short("l")
+                .long("length")
+                .takes_value(true)
+                .value_name("BYTES")
+                .default_value("65000")
+                .help(
+                    "A size of each UDP-packet, specified in bytes. Note that \
+                     your system or a victim server might not be able to handle \
+                     the default value.",
+                ),
+        )
+        .arg(
+            Arg::with_name("waiting")
+                .short("w")
+                .long("waiting")
+                .takes_value(true)
+                .value_name("TIME-SPAN")
+                .default_value("5secs")
+                .help(
+                    "A waiting time before an attack execution. It is mainly \
+                     used to prevent a launch of an erroneous (unwanted) attack.",
+                ),
+        )
+        .after_help("For more information see <https://github.com/Gymmasssorla/anevicon>.")
+        .get_matches()
 }
 
 fn setup_logging() {
