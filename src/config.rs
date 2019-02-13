@@ -19,12 +19,14 @@
 
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};
-use std::net::{AddrParseError, SocketAddr};
-use std::num::ParseIntError;
+use std::net::SocketAddr;
 use std::time::Duration;
 
 use clap::ArgMatches;
-use humantime::{parse_duration, DurationError};
+use humantime::parse_duration;
+
+pub const MIN_PACKET_LENGTH: usize = 1;
+pub const MAX_PACKET_LENGTH: usize = 65000;
 
 #[derive(Debug, Clone)]
 pub struct ArgsConfig {
@@ -39,68 +41,82 @@ pub struct ArgsConfig {
 impl ArgsConfig {
     pub fn from_matches(matches: &ArgMatches) -> Result<ArgsConfig, ArgsConfigError> {
         Ok(ArgsConfig {
-            receiver: matches
-                .value_of("receiver")
-                .unwrap()
-                .parse()
-                .map_err(|error| ArgsConfigError::Receiver(error))?,
-            sender: matches
-                .value_of("sender")
-                .unwrap()
-                .parse()
-                .map_err(|error| ArgsConfigError::Sender(error))?,
-            duration: parse_duration(matches.value_of("duration").unwrap())
-                .map_err(|error| ArgsConfigError::Duration(error))?,
-            length: matches
-                .value_of("length")
-                .unwrap()
-                .parse()
-                .map_err(|error| ArgsConfigError::Length(error))?,
-            waiting: parse_duration(matches.value_of("waiting").unwrap())
-                .map_err(|error| ArgsConfigError::Waiting(error))?,
-            periodicity: parse_duration(matches.value_of("periodicity").unwrap())
-                .map_err(|error| ArgsConfigError::Periodicity(error))?,
+            receiver: ArgsConfig::parse_receiver(matches)?,
+            sender: ArgsConfig::parse_sender(matches)?,
+            duration: ArgsConfig::parse_duration(matches)?,
+            length: ArgsConfig::parse_length(matches)?,
+            waiting: ArgsConfig::parse_waiting(matches)?,
+            periodicity: ArgsConfig::parse_periodicity(matches)?,
         })
+    }
+
+    fn parse_receiver(matches: &ArgMatches) -> Result<SocketAddr, ArgsConfigError> {
+        Ok(matches
+            .value_of("receiver")
+            .unwrap()
+            .parse()
+            .map_err(|_| ArgsConfigError::Receiver)?)
+    }
+
+    fn parse_sender(matches: &ArgMatches) -> Result<SocketAddr, ArgsConfigError> {
+        Ok(matches
+            .value_of("sender")
+            .unwrap()
+            .parse()
+            .map_err(|_| ArgsConfigError::Sender)?)
+    }
+
+    fn parse_duration(matches: &ArgMatches) -> Result<Duration, ArgsConfigError> {
+        Ok(parse_duration(matches.value_of("duration").unwrap())
+            .map_err(|_| ArgsConfigError::Duration)?)
+    }
+
+    fn parse_length(matches: &ArgMatches) -> Result<usize, ArgsConfigError> {
+        let length = matches
+            .value_of("length")
+            .unwrap()
+            .parse()
+            .map_err(|_| ArgsConfigError::Length)?;
+
+        if (length < MIN_PACKET_LENGTH) || (length > MAX_PACKET_LENGTH) {
+            Err(ArgsConfigError::Length)
+        } else {
+            Ok(length)
+        }
+    }
+
+    fn parse_waiting(matches: &ArgMatches) -> Result<Duration, ArgsConfigError> {
+        Ok(parse_duration(matches.value_of("waiting").unwrap())
+            .map_err(|_| ArgsConfigError::Waiting)?)
+    }
+
+    fn parse_periodicity(matches: &ArgMatches) -> Result<Duration, ArgsConfigError> {
+        Ok(parse_duration(matches.value_of("periodicity").unwrap())
+            .map_err(|_| ArgsConfigError::Periodicity)?)
     }
 }
 
 #[derive(Debug, Clone)]
 pub enum ArgsConfigError {
-    Receiver(AddrParseError),
-    Sender(AddrParseError),
-    Duration(DurationError),
-    Length(ParseIntError),
-    Waiting(DurationError),
-    Periodicity(DurationError),
+    Receiver,
+    Sender,
+    Duration,
+    Length,
+    Waiting,
+    Periodicity,
 }
 
 impl Display for ArgsConfigError {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         match self {
-            ArgsConfigError::Receiver(error) => write!(
-                fmt,
-                "An invalid receiver address was specified [{}]!",
-                error
-            ),
-            ArgsConfigError::Sender(error) => {
-                write!(fmt, "An invalid sender address was specified [{}]!", error)
+            ArgsConfigError::Receiver => write!(fmt, "An invalid receiver address was specified!"),
+            ArgsConfigError::Sender => write!(fmt, "An invalid sender address was specified!"),
+            ArgsConfigError::Duration => write!(fmt, "An invalid duration format was specified!"),
+            ArgsConfigError::Length => write!(fmt, "An invalid packet length was specified!"),
+            ArgsConfigError::Waiting => write!(fmt, "An invalid waiting duration was specified!"),
+            ArgsConfigError::Periodicity => {
+                write!(fmt, "An invalid periodicity format was specified!")
             }
-            ArgsConfigError::Duration(error) => {
-                write!(fmt, "An invalid duration format was specified [{}]!", error)
-            }
-            ArgsConfigError::Length(error) => {
-                write!(fmt, "An invalid packet length was specified [{}]!", error)
-            }
-            ArgsConfigError::Waiting(error) => write!(
-                fmt,
-                "An invalid waiting duration was specified [{}]!",
-                error
-            ),
-            ArgsConfigError::Periodicity(error) => write!(
-                fmt,
-                "An invalid periodicity format was specified [{}]!",
-                error
-            ),
         }
     }
 }

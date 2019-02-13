@@ -97,9 +97,9 @@ fn setup_options<'a>() -> ArgMatches<'a> {
                 .value_name("BYTES")
                 .default_value("65000")
                 .help(
-                    "A size of each UDP-packet, specified in bytes. Note that \
-                     your system or a victim server might not be able to handle \
-                     the default value.",
+                    "A size of each UDP-packet in the range of [1; 65000], \
+                     specified in bytes. Note that your system or a victim server \
+                     might not be able to handle the default value.",
                 ),
         )
         .arg(
