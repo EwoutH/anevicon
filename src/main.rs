@@ -22,13 +22,25 @@ use std::io::stdout;
 use clap::{App, Arg, ArgMatches};
 use fern::colors::{Color, ColoredLevelConfig};
 use fern::Dispatch;
+use log::error;
 use termion::color::{Cyan, Fg, Reset};
 use termion::style::{NoUnderline, Underline};
 use time::{self, strftime};
 
+use config::ArgsConfig;
+
+mod config;
+
 fn main() {
-    setup_options();
     setup_logging();
+
+    let config = match ArgsConfig::from_matches(&setup_options()) {
+        Ok(config) => config,
+        Err(error) => {
+            error!("{}", error);
+            std::process::exit(1);
+        }
+    };
 }
 
 fn setup_options<'a>() -> ArgMatches<'a> {
