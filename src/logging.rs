@@ -17,31 +17,44 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use fern::colors::{Color, ColoredLevelConfig};
-use fern::{log_file, Dispatch, FormatCallback};
-use lazy_static::lazy_static;
-use log::{Level, Record};
 use std::fmt::Arguments;
 use std::io::{self, stderr, stdout};
+use std::path::Path;
+
+use fern::colors::{Color, ColoredLevelConfig};
+use fern::{log_file, Dispatch, FormatCallback};
+use log::{Level, Record};
 use termion::color::{self, Cyan, Fg};
 use termion::style::{self, Underline};
 use time::{self, strftime};
 
-lazy_static! {
-    static ref COLORS: ColoredLevelConfig = ColoredLevelConfig::new()
+pub fn setup_logging<P: AsRef<Path>>(output: Option<P>) -> io::Result<()> {
+    let colors = ColoredLevelConfig::new()
         .info(Color::Green)
         .warn(Color::Yellow)
         .error(Color::Red)
         .debug(Color::Magenta)
         .trace(Color::Cyan);
-}
 
-pub fn setup_logging(output: Option<&str>) -> io::Result<()> {
+    // The terminal formatter for user messages and debugging
+    let fmt = move |out: FormatCallback, message: &Arguments, record: &Record| {
+        out.finish(format_args!(
+            "{style}{level}{no_style} [{cyan}{date_time}{no_cyan}]: {message}",
+            style = Underline,
+            level = colors.color(record.level()),
+            no_style = style::Reset,
+            cyan = Fg(Cyan),
+            date_time = strftime("%x %X %z", &time::now()).unwrap(),
+            no_cyan = Fg(color::Reset),
+            message = message,
+        ));
+    };
+
     let mut dispatch = Dispatch::new()
         // Print all notices, warnings, and errors to stdout
         .chain(
             Dispatch::new()
-                .format(term_output)
+                .format(fmt)
                 .filter(|metadata| match metadata.level() {
                     Level::Info | Level::Warn | Level::Error => true,
                     Level::Debug | Level::Trace => false,
@@ -51,7 +64,7 @@ pub fn setup_logging(output: Option<&str>) -> io::Result<()> {
         // Print all traces and debugging information to stderr
         .chain(
             Dispatch::new()
-                .format(term_output)
+                .format(fmt)
                 .filter(|metadata| match metadata.level() {
                     Level::Info | Level::Warn | Level::Error => false,
                     Level::Debug | Level::Trace => true,
@@ -63,7 +76,14 @@ pub fn setup_logging(output: Option<&str>) -> io::Result<()> {
     if let Some(filename) = output {
         dispatch = dispatch.chain(
             Dispatch::new()
-                .format(file_output)
+                .format(|out, message, record| {
+                    out.finish(format_args!(
+                        "[anevicon] {level} [{date_time}]: {message}",
+                        level = record.level(),
+                        date_time = strftime("%x %X %z", &time::now()).unwrap(),
+                        message = message,
+                    ));
+                })
                 .chain(log_file(filename)?),
         );
     }
@@ -71,28 +91,5 @@ pub fn setup_logging(output: Option<&str>) -> io::Result<()> {
     dispatch
         .apply()
         .expect("Cannot correctly setup the logging system");
-
     Ok(())
-}
-
-fn term_output(out: FormatCallback, message: &Arguments, record: &Record) {
-    out.finish(format_args!(
-        "{style}{level}{no_style} [{cyan}{date_time}{no_cyan}]: {message}",
-        style = Underline,
-        level = COLORS.color(record.level()),
-        no_style = style::Reset,
-        cyan = Fg(Cyan),
-        date_time = strftime("%x %X %z", &time::now()).unwrap(),
-        no_cyan = Fg(color::Reset),
-        message = message,
-    ));
-}
-
-fn file_output(out: FormatCallback, message: &Arguments, record: &Record) {
-    out.finish(format_args!(
-        "[anevicon] {level} [{date_time}]: {message}",
-        level = record.level(),
-        date_time = strftime("%x %X %z", &time::now()).unwrap(),
-        message = message,
-    ));
 }
