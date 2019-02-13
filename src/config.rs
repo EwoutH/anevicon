@@ -17,6 +17,7 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
+use std::error::Error;
 use std::fmt::{self, Display, Formatter};
 use std::net::{AddrParseError, SocketAddr};
 use std::num::ParseIntError;
@@ -103,3 +104,5 @@ impl Display for ArgsConfigError {
         }
     }
 }
+
+impl Error for ArgsConfigError {}
