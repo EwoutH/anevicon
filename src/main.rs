@@ -20,6 +20,7 @@
 use std::io::stdout;
 
 use clap::{App, Arg, ArgMatches};
+use colored::Colorize;
 use fern::colors::{Color, ColoredLevelConfig};
 use fern::Dispatch;
 use log::error;
@@ -41,6 +42,8 @@ fn main() {
             std::process::exit(1);
         }
     };
+
+    display_title();
 }
 
 fn setup_options<'a>() -> ArgMatches<'a> {
@@ -139,4 +142,33 @@ fn setup_logging() {
         .chain(stdout())
         .apply()
         .expect("Cannot correctly setup the logging system");
+}
+
+fn display_title() {
+    println!(
+        "       {}",
+        r"                        _                 ".red()
+    );
+    println!(
+        "       {}",
+        r"  __ _ _ __   _____   _(_) ___ ___  _ __  ".red()
+    );
+    println!(
+        "       {}",
+        r" / _` | '_ \ / _ \ \ / / |/ __/ _ \| '_ \ ".red()
+    );
+    println!(
+        "       {}",
+        r"| (_| | | | |  __/\ V /| | (_| (_) | | | |".red()
+    );
+    println!(
+        "       {}",
+        r" \__,_|_| |_|\___| \_/ |_|\___\___/|_| |_|".red()
+    );
+    println!(
+        "{}",
+        "An UDP-based server stress-testing tool, written in Rust\n"
+            .yellow()
+            .underline()
+    );
 }
