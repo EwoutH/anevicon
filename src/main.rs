@@ -17,13 +17,13 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use std::io::stdout;
+use std::io::{stderr, stdout};
 
 use clap::{App, Arg, ArgMatches};
 use colored::Colorize;
 use fern::colors::{Color, ColoredLevelConfig};
 use fern::Dispatch;
-use log::error;
+use log::{error, Level};
 use termion::color::{self, Cyan, Fg};
 use termion::style::{self, Bold};
 use time::{self, strftime};
@@ -151,7 +151,24 @@ fn setup_logging() {
                 message = message,
             ))
         })
-        .chain(stdout())
+        // Print all notices, warnings, and errors to stdout
+        .chain(
+            Dispatch::new()
+                .filter(|metadata| match metadata.level() {
+                    Level::Info | Level::Warn | Level::Error => true,
+                    Level::Debug | Level::Trace => false,
+                })
+                .chain(stdout()),
+        )
+        // Print all traces and debugging information to stderr
+        .chain(
+            Dispatch::new()
+                .filter(|metadata| match metadata.level() {
+                    Level::Info | Level::Warn | Level::Error => false,
+                    Level::Debug | Level::Trace => true,
+                })
+                .chain(stderr()),
+        )
         .apply()
         .expect("Cannot correctly setup the logging system");
 }
