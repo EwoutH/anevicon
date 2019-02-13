@@ -114,6 +114,18 @@ fn setup_options<'a>() -> ArgMatches<'a> {
                      used to prevent a launch of an erroneous (unwanted) attack.",
                 ),
         )
+        .arg(
+            Arg::with_name("periodicity")
+                .short("p")
+                .long("periodicity")
+                .takes_value(true)
+                .value_name("TIME-SPAN")
+                .default_value("0secs")
+                .help(
+                    "A periodicity of sending packets. The default value equals to \
+                     zero seconds, that is, all packets will be sent momentarily.",
+                ),
+        )
         .after_help("For more information see <https://github.com/Gymmasssorla/anevicon>.")
         .get_matches()
 }

@@ -32,6 +32,7 @@ pub struct ArgsConfig {
     duration: Duration,
     length: usize,
     waiting: Duration,
+    periodicity: Duration,
 }
 
 impl ArgsConfig {
@@ -56,6 +57,8 @@ impl ArgsConfig {
                 .map_err(|error| ArgsConfigError::Length(error))?,
             waiting: parse_duration(matches.value_of("waiting").unwrap())
                 .map_err(|error| ArgsConfigError::Waiting(error))?,
+            periodicity: parse_duration(matches.value_of("periodicity").unwrap())
+                .map_err(|error| ArgsConfigError::Periodicity(error))?,
         })
     }
 }
@@ -67,6 +70,7 @@ pub enum ArgsConfigError {
     Duration(DurationError),
     Length(ParseIntError),
     Waiting(DurationError),
+    Periodicity(DurationError),
 }
 
 impl Display for ArgsConfigError {
@@ -89,6 +93,11 @@ impl Display for ArgsConfigError {
             ArgsConfigError::Waiting(error) => write!(
                 fmt,
                 "An invalid waiting duration was specified [{}]!",
+                error
+            ),
+            ArgsConfigError::Periodicity(error) => write!(
+                fmt,
+                "An invalid periodicity format was specified [{}]!",
                 error
             ),
         }
