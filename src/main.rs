@@ -31,10 +31,8 @@ mod logging;
 mod options;
 
 fn main() {
-    // If this line succeeds, then we'll have correct options specified
     let matches = setup_options();
 
-    // If this line succeeds, then we'll have a correct configuration
     let config = match ArgsConfig::from_matches(&matches) {
         Ok(config) => config,
         Err(error) => {
@@ -42,18 +40,13 @@ fn main() {
         }
     };
 
-    // If this line succeeds, then we'll have a configured logging system
     if let Err(error) = setup_logging(matches.value_of("output")) {
         raw_exit_with_error(format_args!("{}", error));
     }
 
-    // Finally, display the title because we have all things configured
-    // correctly
     display_title();
 }
 
-// This function imitates a fancy log message even without a configured
-// logging
 fn raw_exit_with_error(message: Arguments) -> ! {
     println!(
         "{level} [{time}]: {message}",
@@ -64,8 +57,6 @@ fn raw_exit_with_error(message: Arguments) -> ! {
     std::process::exit(1)
 }
 
-// This function displays the fancy application title with the
-// underlined description
 fn display_title() {
     println!(
         "       {}",

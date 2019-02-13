@@ -19,8 +19,6 @@
 
 use clap::{App, Arg, ArgMatches};
 
-// This function returns correct argument matches and fails if those
-// are incorrect
 pub fn setup_options<'a>() -> ArgMatches<'a> {
     App::new("anevicon")
         .author("Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>")
