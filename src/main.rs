@@ -25,7 +25,7 @@ use fern::colors::{Color, ColoredLevelConfig};
 use fern::Dispatch;
 use log::{error, Level};
 use termion::color::{self, Cyan, Fg};
-use termion::style::{self, Bold};
+use termion::style::{self, Underline};
 use time::{self, strftime};
 
 use config::ArgsConfig;
@@ -141,10 +141,10 @@ fn setup_logging() {
     Dispatch::new()
         .format(move |out, message, record| {
             out.finish(format_args!(
-                "{bold}{level}{no_bold} [{cyan}{date_time}{no_cyan}]: {message}",
-                bold = Bold,
+                "{style}{level}{no_style} [{cyan}{date_time}{no_cyan}]: {message}",
+                style = Underline,
                 level = colors.color(record.level()),
-                no_bold = style::Reset,
+                no_style = style::Reset,
                 cyan = Fg(Cyan),
                 date_time = strftime("%x %X %z", &time::now()).unwrap(),
                 no_cyan = Fg(color::Reset),
