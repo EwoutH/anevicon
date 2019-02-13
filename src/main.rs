@@ -17,35 +17,54 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use std::io::{stderr, stdout};
+use std::fmt::Arguments;
 
 use clap::{App, Arg, ArgMatches};
 use colored::Colorize;
-use fern::colors::{Color, ColoredLevelConfig};
-use fern::Dispatch;
-use log::{error, Level};
-use termion::color::{self, Cyan, Fg};
-use termion::style::{self, Underline};
 use time::{self, strftime};
 
 use config::ArgsConfig;
+use logging::setup_logging;
 
 mod config;
+mod logging;
 
 fn main() {
-    setup_logging();
+    // If this line succeeds, then we'll have correct options specified
+    let matches = setup_options();
 
-    let config = match ArgsConfig::from_matches(&setup_options()) {
+    // If this line succeeds, then we'll have a correct configuration
+    let config = match ArgsConfig::from_matches(&matches) {
         Ok(config) => config,
         Err(error) => {
-            error!("{}", error);
-            std::process::exit(1);
+            raw_exit_with_error(format_args!("{}", error));
         }
     };
 
+    // If this line succeeds, then we'll have a configured logging system
+    if let Err(error) = setup_logging(matches.value_of("output")) {
+        raw_exit_with_error(format_args!("{}", error));
+    }
+
+    // Finally, display the title because we have all things configured
+    // correctly
     display_title();
 }
 
+// This function imitates a fancy log message even without a configured
+// logging
+fn raw_exit_with_error(message: Arguments) -> ! {
+    println!(
+        "{level} [{time}]: {message}",
+        level = "ERROR".underline().red(),
+        time = strftime("%x %X %z", &time::now()).unwrap().cyan(),
+        message = message,
+    );
+    std::process::exit(1)
+}
+
+// This function returns correct argument matches and fails if those
+// are incorrect
 fn setup_options<'a>() -> ArgMatches<'a> {
     App::new("anevicon")
         .author("Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>")
@@ -122,57 +141,29 @@ fn setup_options<'a>() -> ArgMatches<'a> {
                 .value_name("TIME-SPAN")
                 .default_value("0secs")
                 .help(
-                    "A periodicity of sending packets. The default value equals to \
-                     zero seconds, that is, all packets will be sent momentarily.",
+                    "A periodicity of sending packets. The default value equals \
+                     to zero seconds, that is, all packets will be sent \
+                     momentarily.",
+                ),
+        )
+        .arg(
+            Arg::with_name("output")
+                .short("o")
+                .long("output")
+                .takes_value(true)
+                .value_name("FILENAME")
+                .help(
+                    "A file in which all logging information will be printed. \
+                     Note that even with this option, logs will even still be \
+                     written to a terminal too.",
                 ),
         )
         .after_help("For more information see <https://github.com/Gymmasssorla/anevicon>.")
         .get_matches()
 }
 
-fn setup_logging() {
-    let colors = ColoredLevelConfig::new()
-        .info(Color::Green)
-        .warn(Color::Yellow)
-        .error(Color::Red)
-        .debug(Color::Magenta)
-        .trace(Color::Cyan);
-
-    Dispatch::new()
-        .format(move |out, message, record| {
-            out.finish(format_args!(
-                "{style}{level}{no_style} [{cyan}{date_time}{no_cyan}]: {message}",
-                style = Underline,
-                level = colors.color(record.level()),
-                no_style = style::Reset,
-                cyan = Fg(Cyan),
-                date_time = strftime("%x %X %z", &time::now()).unwrap(),
-                no_cyan = Fg(color::Reset),
-                message = message,
-            ))
-        })
-        // Print all notices, warnings, and errors to stdout
-        .chain(
-            Dispatch::new()
-                .filter(|metadata| match metadata.level() {
-                    Level::Info | Level::Warn | Level::Error => true,
-                    Level::Debug | Level::Trace => false,
-                })
-                .chain(stdout()),
-        )
-        // Print all traces and debugging information to stderr
-        .chain(
-            Dispatch::new()
-                .filter(|metadata| match metadata.level() {
-                    Level::Info | Level::Warn | Level::Error => false,
-                    Level::Debug | Level::Trace => true,
-                })
-                .chain(stderr()),
-        )
-        .apply()
-        .expect("Cannot correctly setup the logging system");
-}
-
+// This function displays the fancy application title with the
+// underlined description
 fn display_title() {
     println!(
         "       {}",
