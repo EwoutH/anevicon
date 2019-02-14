@@ -41,7 +41,7 @@ fn main() {
     };
 
     if let Err(error) = setup_logging(matches.value_of("output")) {
-        raw_exit_with_error(format_args!("{}", error));
+        raw_exit_with_error(format_args!("Cannot setup the logging system: {}", error));
     }
 
     display_title();
