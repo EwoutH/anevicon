@@ -19,11 +19,12 @@
 
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};
-use std::net::SocketAddr;
+use std::net::{AddrParseError, SocketAddr};
+use std::num::ParseIntError;
 use std::time::Duration;
 
 use clap::ArgMatches;
-use humantime::parse_duration;
+use humantime::{parse_duration, DurationError};
 
 pub const MIN_PACKET_LENGTH: usize = 1;
 pub const MAX_PACKET_LENGTH: usize = 65000;
@@ -40,85 +41,94 @@ pub struct ArgsConfig {
 
 impl ArgsConfig {
     pub fn from_matches(matches: &ArgMatches) -> Result<ArgsConfig, ArgsConfigError> {
-        Ok(ArgsConfig {
-            receiver: ArgsConfig::parse_receiver(matches)?,
-            sender: ArgsConfig::parse_sender(matches)?,
-            duration: ArgsConfig::parse_duration(matches)?,
-            length: ArgsConfig::parse_length(matches)?,
-            waiting: ArgsConfig::parse_waiting(matches)?,
-            periodicity: ArgsConfig::parse_periodicity(matches)?,
-        })
-    }
-
-    fn parse_receiver(matches: &ArgMatches) -> Result<SocketAddr, ArgsConfigError> {
-        Ok(matches
-            .value_of("receiver")
-            .unwrap()
-            .parse()
-            .map_err(|_| ArgsConfigError::Receiver)?)
-    }
-
-    fn parse_sender(matches: &ArgMatches) -> Result<SocketAddr, ArgsConfigError> {
-        Ok(matches
-            .value_of("sender")
-            .unwrap()
-            .parse()
-            .map_err(|_| ArgsConfigError::Sender)?)
-    }
-
-    fn parse_duration(matches: &ArgMatches) -> Result<Duration, ArgsConfigError> {
-        Ok(parse_duration(matches.value_of("duration").unwrap())
-            .map_err(|_| ArgsConfigError::Duration)?)
-    }
-
-    fn parse_length(matches: &ArgMatches) -> Result<usize, ArgsConfigError> {
-        let length = matches
+        // Check that the specified packet length is bettween [1; 65000]
+        let length: usize = matches
             .value_of("length")
             .unwrap()
             .parse()
-            .map_err(|_| ArgsConfigError::Length)?;
+            .map_err(|error| ArgsConfigError::Length(PacketLengthError::InvalidFormat(error)))?;
 
-        if (length < MIN_PACKET_LENGTH) || (length > MAX_PACKET_LENGTH) {
-            Err(ArgsConfigError::Length)
-        } else {
-            Ok(length)
+        if length < MIN_PACKET_LENGTH {
+            return Err(ArgsConfigError::Length(PacketLengthError::Underflow));
+        } else if length > MAX_PACKET_LENGTH {
+            return Err(ArgsConfigError::Length(PacketLengthError::Overflow));
         }
-    }
 
-    fn parse_waiting(matches: &ArgMatches) -> Result<Duration, ArgsConfigError> {
-        Ok(parse_duration(matches.value_of("waiting").unwrap())
-            .map_err(|_| ArgsConfigError::Waiting)?)
-    }
-
-    fn parse_periodicity(matches: &ArgMatches) -> Result<Duration, ArgsConfigError> {
-        Ok(parse_duration(matches.value_of("periodicity").unwrap())
-            .map_err(|_| ArgsConfigError::Periodicity)?)
+        // We use unwrappers because we have the defaut options specified
+        Ok(ArgsConfig {
+            receiver: matches
+                .value_of("receiver")
+                .unwrap()
+                .parse()
+                .map_err(|error| ArgsConfigError::Receiver(error))?,
+            sender: matches
+                .value_of("sender")
+                .unwrap()
+                .parse()
+                .map_err(|error| ArgsConfigError::Sender(error))?,
+            duration: parse_duration(matches.value_of("duration").unwrap())
+                .map_err(|error| ArgsConfigError::Duration(error))?,
+            length,
+            waiting: parse_duration(matches.value_of("waiting").unwrap())
+                .map_err(|error| ArgsConfigError::Waiting(error))?,
+            periodicity: parse_duration(matches.value_of("periodicity").unwrap())
+                .map_err(|error| ArgsConfigError::Periodicity(error))?,
+        })
     }
 }
 
 #[derive(Debug, Clone)]
 pub enum ArgsConfigError {
-    Receiver,
-    Sender,
-    Duration,
-    Length,
-    Waiting,
-    Periodicity,
+    Receiver(AddrParseError),
+    Sender(AddrParseError),
+    Duration(DurationError),
+    Length(PacketLengthError),
+    Waiting(DurationError),
+    Periodicity(DurationError),
 }
 
 impl Display for ArgsConfigError {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         match self {
-            ArgsConfigError::Receiver => write!(fmt, "An invalid receiver address was specified!"),
-            ArgsConfigError::Sender => write!(fmt, "An invalid sender address was specified!"),
-            ArgsConfigError::Duration => write!(fmt, "An invalid duration format was specified!"),
-            ArgsConfigError::Length => write!(fmt, "An invalid packet length was specified!"),
-            ArgsConfigError::Waiting => write!(fmt, "An invalid waiting duration was specified!"),
-            ArgsConfigError::Periodicity => {
-                write!(fmt, "An invalid periodicity format was specified!")
+            ArgsConfigError::Receiver(error) => {
+                write!(fmt, "An invalid receiver address was specified: {}!", error)
+            }
+            ArgsConfigError::Sender(error) => {
+                write!(fmt, "An invalid sender address was specified: {}!", error)
+            }
+            ArgsConfigError::Duration(error) => {
+                write!(fmt, "An invalid duration format was specified: {}!", error)
+            }
+            ArgsConfigError::Length(error) => {
+                write!(fmt, "An invalid packet length was specified: {}!", error)
+            }
+            ArgsConfigError::Waiting(error) => {
+                write!(fmt, "An invalid waiting duration was specified: {}!", error)
+            }
+            ArgsConfigError::Periodicity(error) => {
+                write!(fmt, "An invalid periodicity was specified: {}!", error)
             }
         }
     }
 }
 
 impl Error for ArgsConfigError {}
+
+#[derive(Debug, Clone)]
+pub enum PacketLengthError {
+    InvalidFormat(ParseIntError),
+    Overflow,
+    Underflow,
+}
+
+impl Display for PacketLengthError {
+    fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
+        match self {
+            PacketLengthError::InvalidFormat(error) => write!(fmt, "{}", error),
+            PacketLengthError::Overflow => write!(fmt, "Overflow occurred"),
+            PacketLengthError::Underflow => write!(fmt, "Underflow occurred"),
+        }
+    }
+}
+
+impl Error for PacketLengthError {}
