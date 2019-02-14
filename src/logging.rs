@@ -18,17 +18,17 @@
  */
 
 use std::fmt::Arguments;
-use std::io::{self, stderr, stdout};
-use std::path::PathBuf;
+use std::fs::File;
+use std::io::{stderr, stdout};
 
 use fern::colors::{Color, ColoredLevelConfig};
-use fern::{log_file, Dispatch, FormatCallback};
+use fern::{Dispatch, FormatCallback};
 use log::{Level, Record};
 use termion::color::{self, Cyan, Fg};
 use termion::style::{self, Underline};
 use time::{self, strftime};
 
-pub fn setup_logging(output: &Option<PathBuf>) -> io::Result<()> {
+pub fn setup_logging(output: Option<File>) {
     let colors = ColoredLevelConfig::new()
         .info(Color::Green)
         .warn(Color::Yellow)
@@ -73,7 +73,7 @@ pub fn setup_logging(output: &Option<PathBuf>) -> io::Result<()> {
         );
 
     // Add an output logging file if it was specified by a user
-    if let Some(filename) = output {
+    if let Some(output) = output {
         dispatch = dispatch.chain(
             Dispatch::new()
                 .format(|out, message, record| {
@@ -84,12 +84,11 @@ pub fn setup_logging(output: &Option<PathBuf>) -> io::Result<()> {
                         message = message,
                     ));
                 })
-                .chain(log_file(filename)?),
+                .chain(output),
         );
     }
 
     dispatch
         .apply()
         .expect("Cannot correctly setup the logging system");
-    Ok(())
 }

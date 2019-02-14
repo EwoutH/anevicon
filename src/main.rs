@@ -17,12 +17,10 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use std::fmt::Arguments;
-
 use colored::Colorize;
 use structopt::StructOpt;
 
-use config::{ArgsConfig, MAX_PACKET_LENGTH, MIN_PACKET_LENGTH};
+use config::ArgsConfig;
 use logging::setup_logging;
 
 mod config;
@@ -30,30 +28,8 @@ mod logging;
 
 fn main() {
     let config = ArgsConfig::from_args();
-
-    if config.length() < MIN_PACKET_LENGTH {
-        option_error("--length <BYTES>", format_args!("The value is too small"));
-    } else if config.length() > MAX_PACKET_LENGTH {
-        option_error("--length <BYTES>", format_args!("The value is too big"));
-    }
-
-    if let Err(error) = setup_logging(config.output()) {
-        option_error("--output <FILENAME>", format_args!("{}", error));
-    }
-
+    setup_logging(config.output);
     display_title();
-}
-
-// Prints a CLAP-like error message to the standard error stream and
-// then exists the current process with the failure exit code (1).
-fn option_error(option: &str, error_message: Arguments) {
-    eprintln!(
-        "{error} Invalid value for '{option}': {error_message}",
-        error = "error:".bold().red(),
-        option = option.yellow(),
-        error_message = error_message
-    );
-    std::process::exit(1);
 }
 
 fn display_title() {

@@ -17,17 +17,21 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
+use fern::log_file;
+use std::error::Error;
+use std::fmt::{self, Display, Formatter};
+use std::fs::File;
 use std::net::SocketAddr;
-use std::path::PathBuf;
+use std::num::ParseIntError;
 use std::time::Duration;
 
 use humantime::parse_duration;
 use structopt::StructOpt;
 
-pub const MIN_PACKET_LENGTH: usize = 1;
-pub const MAX_PACKET_LENGTH: usize = 65000;
+const MIN_PACKET_LENGTH: usize = 1;
+const MAX_PACKET_LENGTH: usize = 65000;
 
-#[derive(Debug, Clone, StructOpt)]
+#[derive(Debug, StructOpt)]
 #[structopt(
     author = "Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>",
     about = "An UDP-based server stress-testing tool, written in Rust.",
@@ -44,7 +48,7 @@ pub struct ArgsConfig {
         value_name = "ADDRESS",
         required = true
     )]
-    receiver: SocketAddr,
+    pub receiver: SocketAddr,
 
     /// A sender of generated traffic, specified as an IP-address
     /// and a port number, separated by the colon character.
@@ -55,7 +59,7 @@ pub struct ArgsConfig {
         value_name = "ADDRESS",
         default_value = "0.0.0.0:0"
     )]
-    sender: SocketAddr,
+    pub sender: SocketAddr,
 
     /// A program working time. The default value is too big, that
     /// is, an attack will be performed until you explicitly stop
@@ -68,7 +72,7 @@ pub struct ArgsConfig {
         default_value = "64years 64hours 64secs",
         parse(try_from_str = "parse_duration")
     )]
-    duration: Duration,
+    pub duration: Duration,
 
     /// A size of each UDP-packet in the range of [1; 65000],
     /// specified in bytes. Note that your system or a victim server
@@ -78,9 +82,10 @@ pub struct ArgsConfig {
         long = "length",
         takes_value = true,
         value_name = "BYTES",
-        default_value = "65000"
+        default_value = "65000",
+        parse(try_from_str = "parse_length")
     )]
-    length: usize,
+    pub length: usize,
 
     /// A waiting time before an attack execution. It is mainly
     /// used to prevent a launch of an erroneous (unwanted) attack.
@@ -92,7 +97,7 @@ pub struct ArgsConfig {
         default_value = "5secs",
         parse(try_from_str = "parse_duration")
     )]
-    waiting: Duration,
+    pub waiting: Duration,
 
     /// A periodicity of sending packets. The default value equals
     /// to zero seconds, that is, all packets will be sent
@@ -105,7 +110,7 @@ pub struct ArgsConfig {
         default_value = "0secs",
         parse(try_from_str = "parse_duration")
     )]
-    periodicity: Duration,
+    pub periodicity: Duration,
 
     /// A file in which all logging information will be printed.
     /// Note that even with this option, logs will even still be
@@ -114,37 +119,41 @@ pub struct ArgsConfig {
         short = "o",
         long = "output",
         takes_value = true,
-        value_name = "FILENAME"
+        value_name = "FILENAME",
+        parse(try_from_str = "log_file")
     )]
-    output: Option<PathBuf>,
+    pub output: Option<File>,
 }
 
-impl ArgsConfig {
-    pub fn receiver(&self) -> SocketAddr {
-        self.receiver
+fn parse_length(length: &str) -> Result<usize, PacketLengthError> {
+    let length: usize = length
+        .parse()
+        .map_err(|error| PacketLengthError::InvalidFormat(error))?;
+
+    if length < MIN_PACKET_LENGTH {
+        return Err(PacketLengthError::Underflow);
+    } else if length > MAX_PACKET_LENGTH {
+        return Err(PacketLengthError::Overflow);
     }
 
-    pub fn sender(&self) -> SocketAddr {
-        self.sender
-    }
+    Ok(length)
+}
 
-    pub fn duration(&self) -> Duration {
-        self.duration
-    }
+#[derive(Debug, Clone)]
+enum PacketLengthError {
+    InvalidFormat(ParseIntError),
+    Overflow,
+    Underflow,
+}
 
-    pub fn length(&self) -> usize {
-        self.length
-    }
-
-    pub fn waiting(&self) -> Duration {
-        self.waiting
-    }
-
-    pub fn periodicity(&self) -> Duration {
-        self.periodicity
-    }
-
-    pub fn output(&self) -> &Option<PathBuf> {
-        &self.output
+impl Display for PacketLengthError {
+    fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
+        match self {
+            PacketLengthError::InvalidFormat(error) => write!(fmt, "{}", error),
+            PacketLengthError::Overflow => write!(fmt, "The value is too big"),
+            PacketLengthError::Underflow => write!(fmt, "The value is too small"),
+        }
     }
 }
+
+impl Error for PacketLengthError {}
