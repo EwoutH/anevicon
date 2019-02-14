@@ -17,7 +17,7 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use clap::{App, Arg, ArgMatches, crate_version};
+use clap::{crate_version, App, Arg, ArgMatches};
 
 pub fn setup_options<'a>() -> ArgMatches<'a> {
     App::new("anevicon")
