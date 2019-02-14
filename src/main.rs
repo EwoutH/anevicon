@@ -20,41 +20,40 @@
 use std::fmt::Arguments;
 
 use colored::Colorize;
-use time::{self, strftime};
+use structopt::StructOpt;
 
-use config::ArgsConfig;
+use config::{ArgsConfig, MAX_PACKET_LENGTH, MIN_PACKET_LENGTH};
 use logging::setup_logging;
-use options::setup_options;
 
 mod config;
 mod logging;
-mod options;
 
 fn main() {
-    let matches = setup_options();
+    let config = ArgsConfig::from_args();
 
-    let config = match ArgsConfig::from_matches(&matches) {
-        Ok(config) => config,
-        Err(error) => {
-            raw_exit_with_error(format_args!("{}", error));
-        }
-    };
+    if config.length() < MIN_PACKET_LENGTH {
+        option_error("--length <BYTES>", format_args!("The value is too small"));
+    } else if config.length() > MAX_PACKET_LENGTH {
+        option_error("--length <BYTES>", format_args!("The value is too big"));
+    }
 
-    if let Err(error) = setup_logging(matches.value_of("output")) {
-        raw_exit_with_error(format_args!("Cannot open the output file: {}", error));
+    if let Err(error) = setup_logging(config.output()) {
+        option_error("--output <FILENAME>", format_args!("{}", error));
     }
 
     display_title();
 }
 
-fn raw_exit_with_error(message: Arguments) -> ! {
-    println!(
-        "{level} [{time}]: {message}",
-        level = "ERROR".underline().red(),
-        time = strftime("%x %X %z", &time::now()).unwrap().cyan(),
-        message = message,
+// Prints CLAP-like error message to the standard error stream and then
+// exists the current process with the exit code of 1.
+fn option_error(option: &str, message: Arguments) {
+    eprintln!(
+        "{error} Invalid value for '{option}': {message}",
+        error = "error:".bold().red(),
+        option = option.yellow(),
+        message = message
     );
-    std::process::exit(1)
+    std::process::exit(1);
 }
 
 fn display_title() {

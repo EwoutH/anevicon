@@ -19,7 +19,7 @@
 
 use std::fmt::Arguments;
 use std::io::{self, stderr, stdout};
-use std::path::Path;
+use std::path::PathBuf;
 
 use fern::colors::{Color, ColoredLevelConfig};
 use fern::{log_file, Dispatch, FormatCallback};
@@ -28,7 +28,7 @@ use termion::color::{self, Cyan, Fg};
 use termion::style::{self, Underline};
 use time::{self, strftime};
 
-pub fn setup_logging<P: AsRef<Path>>(output: Option<P>) -> io::Result<()> {
+pub fn setup_logging(output: &Option<PathBuf>) -> io::Result<()> {
     let colors = ColoredLevelConfig::new()
         .info(Color::Green)
         .warn(Color::Yellow)

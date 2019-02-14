@@ -17,121 +17,134 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use std::error::Error;
-use std::fmt::{self, Display, Formatter};
-use std::net::{AddrParseError, SocketAddr};
-use std::num::ParseIntError;
+use std::net::SocketAddr;
+use std::path::PathBuf;
 use std::time::Duration;
 
-use clap::ArgMatches;
-use humantime::{parse_duration, DurationError};
+use humantime::parse_duration;
+use structopt::StructOpt;
 
 pub const MIN_PACKET_LENGTH: usize = 1;
 pub const MAX_PACKET_LENGTH: usize = 65000;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, StructOpt)]
+#[structopt(
+    author = "Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>",
+    about = "An UDP-based server stress-testing tool, written in Rust.",
+    after_help = "For more information see <https://github.com/Gymmasssorla/anevicon>.",
+    set_term_width = 80
+)]
 pub struct ArgsConfig {
+    /// A receiver of generated traffic, specified as an IP-address
+    /// and a port number, separated by the colon character.
+    #[structopt(
+        short = "r",
+        long = "receiver",
+        takes_value = true,
+        value_name = "ADDRESS",
+        required = true
+    )]
     receiver: SocketAddr,
+
+    /// A sender of generated traffic, specified as an IP-address
+    /// and a port number, separated by the colon character.
+    #[structopt(
+        short = "s",
+        long = "sender",
+        takes_value = true,
+        value_name = "ADDRESS",
+        default_value = "0.0.0.0:0"
+    )]
     sender: SocketAddr,
+
+    /// A program working time. The default value is too big, that
+    /// is, an attack will be performed until you explicitly stop
+    /// the process.
+    #[structopt(
+        short = "d",
+        long = "duration",
+        takes_value = true,
+        value_name = "TIME-SPAN",
+        default_value = "64years 64hours 64secs",
+        parse(try_from_str = "parse_duration")
+    )]
     duration: Duration,
+
+    /// A size of each UDP-packet in the range of [1; 65000],
+    /// specified in bytes. Note that your system or a victim server
+    /// might not be able to handle the default value.
+    #[structopt(
+        short = "l",
+        long = "length",
+        takes_value = true,
+        value_name = "BYTES",
+        default_value = "65000"
+    )]
     length: usize,
+
+    /// A waiting time before an attack execution. It is mainly
+    /// used to prevent a launch of an erroneous (unwanted) attack.
+    #[structopt(
+        short = "w",
+        long = "waiting",
+        takes_value = true,
+        value_name = "TIME-SPAN",
+        default_value = "5secs",
+        parse(try_from_str = "parse_duration")
+    )]
     waiting: Duration,
+
+    /// A periodicity of sending packets. The default value equals
+    /// to zero seconds, that is, all packets will be sent
+    /// momentarily.
+    #[structopt(
+        short = "p",
+        long = "periodicity",
+        takes_value = true,
+        value_name = "TIME-SPAN",
+        default_value = "0secs",
+        parse(try_from_str = "parse_duration")
+    )]
     periodicity: Duration,
+
+    /// A file in which all logging information will be printed.
+    /// Note that even with this option, logs will even still be
+    /// written to a terminal too.
+    #[structopt(
+        short = "o",
+        long = "output",
+        takes_value = true,
+        value_name = "FILENAME"
+    )]
+    output: Option<PathBuf>,
 }
 
 impl ArgsConfig {
-    pub fn from_matches(matches: &ArgMatches) -> Result<ArgsConfig, ArgsConfigError> {
-        // Check that the specified packet length is bettween [1; 65000]
-        let length: usize = matches
-            .value_of("length")
-            .unwrap()
-            .parse()
-            .map_err(|error| ArgsConfigError::Length(PacketLengthError::InvalidFormat(error)))?;
+    pub fn receiver(&self) -> SocketAddr {
+        self.receiver
+    }
 
-        if length < MIN_PACKET_LENGTH {
-            return Err(ArgsConfigError::Length(PacketLengthError::Underflow));
-        } else if length > MAX_PACKET_LENGTH {
-            return Err(ArgsConfigError::Length(PacketLengthError::Overflow));
-        }
+    pub fn sender(&self) -> SocketAddr {
+        self.sender
+    }
 
-        // We use unwrappers because we have the defaut options specified
-        Ok(ArgsConfig {
-            receiver: matches
-                .value_of("receiver")
-                .unwrap()
-                .parse()
-                .map_err(|error| ArgsConfigError::Receiver(error))?,
-            sender: matches
-                .value_of("sender")
-                .unwrap()
-                .parse()
-                .map_err(|error| ArgsConfigError::Sender(error))?,
-            duration: parse_duration(matches.value_of("duration").unwrap())
-                .map_err(|error| ArgsConfigError::Duration(error))?,
-            length,
-            waiting: parse_duration(matches.value_of("waiting").unwrap())
-                .map_err(|error| ArgsConfigError::Waiting(error))?,
-            periodicity: parse_duration(matches.value_of("periodicity").unwrap())
-                .map_err(|error| ArgsConfigError::Periodicity(error))?,
-        })
+    pub fn duration(&self) -> Duration {
+        self.duration
+    }
+
+    pub fn length(&self) -> usize {
+        self.length
+    }
+
+    pub fn waiting(&self) -> Duration {
+        self.waiting
+    }
+
+    pub fn periodicity(&self) -> Duration {
+        self.periodicity
+    }
+
+    pub fn output(&self) -> &Option<PathBuf> {
+        &self.output
     }
 }
-
-#[derive(Debug, Clone)]
-pub enum ArgsConfigError {
-    Receiver(AddrParseError),
-    Sender(AddrParseError),
-    Duration(DurationError),
-    Length(PacketLengthError),
-    Waiting(DurationError),
-    Periodicity(DurationError),
-}
-
-impl Display for ArgsConfigError {
-    fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
-        match self {
-            ArgsConfigError::Receiver(error) => {
-                write!(fmt, "An invalid receiver address was specified: {}!", error)
-            }
-            ArgsConfigError::Sender(error) => {
-                write!(fmt, "An invalid sender address was specified: {}!", error)
-            }
-            ArgsConfigError::Duration(error) => {
-                write!(fmt, "An invalid duration format was specified: {}!", error)
-            }
-            ArgsConfigError::Length(error) => write!(
-                fmt,
-                "An invalid packet length was specified: {}. \
-                 A packet length must be in the range of [1; 65000]!",
-                error
-            ),
-            ArgsConfigError::Waiting(error) => {
-                write!(fmt, "An invalid waiting duration was specified: {}!", error)
-            }
-            ArgsConfigError::Periodicity(error) => {
-                write!(fmt, "An invalid periodicity was specified: {}!", error)
-            }
-        }
-    }
-}
-
-impl Error for ArgsConfigError {}
-
-#[derive(Debug, Clone)]
-pub enum PacketLengthError {
-    InvalidFormat(ParseIntError),
-    Overflow,
-    Underflow,
-}
-
-impl Display for PacketLengthError {
-    fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
-        match self {
-            PacketLengthError::InvalidFormat(error) => write!(fmt, "{}", error),
-            PacketLengthError::Overflow => write!(fmt, "Overflow occurred"),
-            PacketLengthError::Underflow => write!(fmt, "Underflow occurred"),
-        }
-    }
-}
-
-impl Error for PacketLengthError {}
