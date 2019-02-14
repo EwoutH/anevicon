@@ -25,6 +25,7 @@ use logging::{raw_exit_with_error, setup_logging};
 
 mod config;
 mod logging;
+mod summary;
 
 fn main() {
     let config = ArgsConfig::from_args();
