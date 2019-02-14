@@ -99,9 +99,12 @@ impl Display for ArgsConfigError {
             ArgsConfigError::Duration(error) => {
                 write!(fmt, "An invalid duration format was specified: {}!", error)
             }
-            ArgsConfigError::Length(error) => {
-                write!(fmt, "An invalid packet length was specified: {}!", error)
-            }
+            ArgsConfigError::Length(error) => write!(
+                fmt,
+                "An invalid packet length was specified: {}. \
+                 A packet length must be in the range of [1; 65000]!",
+                error
+            ),
             ArgsConfigError::Waiting(error) => {
                 write!(fmt, "An invalid waiting duration was specified: {}!", error)
             }
