@@ -44,14 +44,14 @@ fn main() {
     display_title();
 }
 
-// Prints CLAP-like error message to the standard error stream and then
-// exists the current process with the exit code of 1.
-fn option_error(option: &str, message: Arguments) {
+// Prints a CLAP-like error message to the standard error stream and
+// then exists the current process with the failure exit code (1).
+fn option_error(option: &str, error_message: Arguments) {
     eprintln!(
-        "{error} Invalid value for '{option}': {message}",
+        "{error} Invalid value for '{option}': {error_message}",
         error = "error:".bold().red(),
         option = option.yellow(),
-        message = message
+        error_message = error_message
     );
     std::process::exit(1);
 }
