@@ -21,14 +21,18 @@ use colored::Colorize;
 use structopt::StructOpt;
 
 use config::ArgsConfig;
-use logging::setup_logging;
+use logging::{raw_exit_with_error, setup_logging};
 
 mod config;
 mod logging;
 
 fn main() {
     let config = ArgsConfig::from_args();
-    setup_logging(config.output);
+
+    if let Err(error) = setup_logging(config.output()) {
+        raw_exit_with_error(format_args!("Cannot open the output file: {}", error));
+    }
+
     display_title();
 }
 

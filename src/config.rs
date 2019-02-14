@@ -17,12 +17,11 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use fern::log_file;
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};
-use std::fs::File;
 use std::net::SocketAddr;
 use std::num::ParseIntError;
+use std::path::PathBuf;
 use std::time::Duration;
 
 use humantime::parse_duration;
@@ -48,7 +47,7 @@ pub struct ArgsConfig {
         value_name = "ADDRESS",
         required = true
     )]
-    pub receiver: SocketAddr,
+    receiver: SocketAddr,
 
     /// A sender of generated traffic, specified as an IP-address
     /// and a port number, separated by the colon character.
@@ -59,7 +58,7 @@ pub struct ArgsConfig {
         value_name = "ADDRESS",
         default_value = "0.0.0.0:0"
     )]
-    pub sender: SocketAddr,
+    sender: SocketAddr,
 
     /// A program working time. The default value is too big, that
     /// is, an attack will be performed until you explicitly stop
@@ -72,7 +71,7 @@ pub struct ArgsConfig {
         default_value = "64years 64hours 64secs",
         parse(try_from_str = "parse_duration")
     )]
-    pub duration: Duration,
+    duration: Duration,
 
     /// A size of each UDP-packet in the range of [1; 65000],
     /// specified in bytes. Note that your system or a victim server
@@ -85,7 +84,7 @@ pub struct ArgsConfig {
         default_value = "65000",
         parse(try_from_str = "parse_length")
     )]
-    pub length: usize,
+    length: usize,
 
     /// A waiting time before an attack execution. It is mainly
     /// used to prevent a launch of an erroneous (unwanted) attack.
@@ -97,7 +96,7 @@ pub struct ArgsConfig {
         default_value = "5secs",
         parse(try_from_str = "parse_duration")
     )]
-    pub waiting: Duration,
+    waiting: Duration,
 
     /// A periodicity of sending packets. The default value equals
     /// to zero seconds, that is, all packets will be sent
@@ -110,7 +109,7 @@ pub struct ArgsConfig {
         default_value = "0secs",
         parse(try_from_str = "parse_duration")
     )]
-    pub periodicity: Duration,
+    periodicity: Duration,
 
     /// A file in which all logging information will be printed.
     /// Note that even with this option, logs will even still be
@@ -119,10 +118,39 @@ pub struct ArgsConfig {
         short = "o",
         long = "output",
         takes_value = true,
-        value_name = "FILENAME",
-        parse(try_from_str = "log_file")
+        value_name = "FILENAME"
     )]
-    pub output: Option<File>,
+    output: Option<PathBuf>,
+}
+
+impl ArgsConfig {
+    pub fn receiver(&self) -> SocketAddr {
+        self.receiver
+    }
+
+    pub fn sender(&self) -> SocketAddr {
+        self.sender
+    }
+
+    pub fn duration(&self) -> Duration {
+        self.duration
+    }
+
+    pub fn length(&self) -> usize {
+        self.length
+    }
+
+    pub fn waiting(&self) -> Duration {
+        self.waiting
+    }
+
+    pub fn periodicity(&self) -> Duration {
+        self.periodicity
+    }
+
+    pub fn output(&self) -> &Option<PathBuf> {
+        &self.output
+    }
 }
 
 fn parse_length(length: &str) -> Result<usize, PacketLengthError> {

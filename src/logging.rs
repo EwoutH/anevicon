@@ -18,17 +18,19 @@
  */
 
 use std::fmt::Arguments;
-use std::fs::File;
+use std::io;
 use std::io::{stderr, stdout};
+use std::path::Path;
 
+use colored::Colorize;
 use fern::colors::{Color, ColoredLevelConfig};
-use fern::{Dispatch, FormatCallback};
+use fern::{log_file, Dispatch, FormatCallback};
 use log::{Level, Record};
 use termion::color::{self, Cyan, Fg};
 use termion::style::{self, Underline};
 use time::{self, strftime};
 
-pub fn setup_logging(output: Option<File>) {
+pub fn setup_logging<P: AsRef<Path>>(output: &Option<P>) -> io::Result<()> {
     let colors = ColoredLevelConfig::new()
         .info(Color::Green)
         .warn(Color::Yellow)
@@ -73,7 +75,7 @@ pub fn setup_logging(output: Option<File>) {
         );
 
     // Add an output logging file if it was specified by a user
-    if let Some(output) = output {
+    if let Some(filename) = output {
         dispatch = dispatch.chain(
             Dispatch::new()
                 .format(|out, message, record| {
@@ -84,11 +86,23 @@ pub fn setup_logging(output: Option<File>) {
                         message = message,
                     ));
                 })
-                .chain(output),
+                .chain(log_file(filename)?),
         );
     }
 
     dispatch
         .apply()
         .expect("Cannot correctly setup the logging system");
+    Ok(())
+}
+
+// Prints an error message even without a configured logging system
+pub fn raw_exit_with_error(message: Arguments) {
+    println!(
+        "{error} [{date_time}]: {message}",
+        error = "ERROR".red().underline(),
+        date_time = strftime("%x %X %z", &time::now()).unwrap().cyan(),
+        message = message
+    );
+    std::process::exit(1);
 }
