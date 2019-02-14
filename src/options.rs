@@ -17,13 +17,13 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use clap::{App, Arg, ArgMatches};
+use clap::{App, Arg, ArgMatches, crate_version};
 
 pub fn setup_options<'a>() -> ArgMatches<'a> {
     App::new("anevicon")
         .author("Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>")
         .about("An UDP-based server stress-testing tool, written in Rust.")
-        .version("0.1.0")
+        .version(crate_version!())
         .set_term_width(80)
         .arg(
             Arg::with_name("receiver")
