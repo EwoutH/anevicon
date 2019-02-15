@@ -44,7 +44,7 @@ impl AttackSummary {
     }
 
     pub fn megabytes_sent(&self) -> usize {
-        self.bytes_sent / 1024
+        self.bytes_sent / 1024 / 1024
     }
 
     pub fn packets_sent(&self) -> usize {
@@ -76,5 +76,73 @@ impl Display for AttackSummary {
             self.megabytes_in_sec(),
             format_duration(self.time_passed())
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::thread::sleep;
+
+    #[test]
+    fn is_nondecreasing_clock() {
+        let summary = AttackSummary::new();
+
+        let mut last_time = summary.time_passed();
+        for _ in 0..50 {
+            // Wait for about 30 milliseconds to see real results
+            sleep(Duration::from_millis(30));
+
+            let current_time = summary.time_passed();
+
+            // Check that out clock is monotonically nondecreasing
+            assert!(last_time <= current_time);
+
+            last_time = current_time;
+        }
+    }
+
+    #[test]
+    fn is_correct_initial_value() {
+        let summary = AttackSummary::new();
+
+        assert_eq!(summary.megabytes_sent(), 0);
+        assert_eq!(summary.packets_sent(), 0);
+        assert_eq!(summary.megabytes_in_sec(), 0);
+    }
+
+    #[test]
+    fn update_works() {
+        let mut summary = AttackSummary::new();
+
+        summary.update(1024 * 1024 * 23, 2698);
+        assert_eq!(summary.megabytes_sent(), 23);
+        assert_eq!(summary.packets_sent(), 2698);
+
+        summary.update(1024 * 1024 * 85, 4258);
+        assert_eq!(summary.megabytes_sent(), 85 + 23);
+        assert_eq!(summary.packets_sent(), 2698 + 4258);
+
+        // Check that our summary truncates decimals correctly
+        summary.update(1024 * 1023, 5338);
+        assert_eq!(
+            summary.megabytes_sent(),
+            85 + 23,
+            "The 'AttackSummary' structure truncates decimals incorrectly"
+        );
+        assert_eq!(summary.packets_sent(), 2698 + 4258 + 5338);
+
+        // Check that our summary remains the same after zero-update
+        summary.update(0, 0);
+        assert_eq!(
+            summary.megabytes_sent(),
+            85 + 23,
+            "The 'AttackSummary' hasn't the same megabytes after zero-update"
+        );
+        assert_eq!(
+            summary.packets_sent(),
+            2698 + 4258 + 5338,
+            "The 'AttackSummary' hasn't the same packets after zero-update"
+        );
     }
 }
