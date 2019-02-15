@@ -97,7 +97,7 @@ pub fn setup_logging<P: AsRef<Path>>(output: &Option<P>) -> io::Result<()> {
 }
 
 // Prints an error message even without a configured logging system
-pub fn raw_exit_with_error(message: Arguments) {
+pub fn raw_exit_with_error(message: Arguments) -> ! {
     println!(
         "{error} [{date_time}]: {message}",
         error = "ERROR".red().underline(),

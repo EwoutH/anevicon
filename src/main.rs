@@ -20,9 +20,11 @@
 use colored::Colorize;
 use structopt::StructOpt;
 
+use attack::Attacker;
 use config::ArgsConfig;
 use logging::{raw_exit_with_error, setup_logging};
 
+mod attack;
 mod config;
 mod logging;
 mod summary;
@@ -35,6 +37,15 @@ fn main() {
     }
 
     display_title();
+
+    let attacker = match Attacker::from_args_config(&config) {
+        Err(error) => {
+            raw_exit_with_error(format_args!("Cannot setup the attacker: {}", error));
+        }
+        Ok(attacker) => attacker,
+    };
+
+    attacker.attack();
 }
 
 fn display_title() {
