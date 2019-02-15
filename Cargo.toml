@@ -1,6 +1,6 @@
 [package]
 name = "anevicon"
-description = "An UDP-based server stress-testing tool, written in Rust"
+description = "The fastest UDP-based server stress-testing tool, written in Rust"
 repository = "https://github.com/Gymmasssorla/anevicon"
 version = "0.1.0"
 authors = ["Temirkhan Myrzamadi <gymmasssorla@gmail.com>"]

@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/badge/crates.io-v0.1.0-orange.svg">
   </a>
   
-  An UDP-based server stress-testing tool, written in Rust
+  The fastest UDP-based server stress-testing tool, written in Rust
 </div>
 
 ## Introduction
