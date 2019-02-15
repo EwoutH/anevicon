@@ -123,7 +123,6 @@ mod tests {
         assert_eq!(summary.megabytes_sent(), 85 + 23);
         assert_eq!(summary.packets_sent(), 2698 + 4258);
 
-        // Check that our summary truncates decimals correctly
         summary.update(1024 * 1023, 5338);
         assert_eq!(
             summary.megabytes_sent(),
@@ -132,7 +131,6 @@ mod tests {
         );
         assert_eq!(summary.packets_sent(), 2698 + 4258 + 5338);
 
-        // Check that our summary remains the same after zero-update
         summary.update(0, 0);
         assert_eq!(
             summary.megabytes_sent(),
