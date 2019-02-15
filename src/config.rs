@@ -82,7 +82,7 @@ pub struct ArgsConfig {
         takes_value = true,
         value_name = "BYTES",
         default_value = "65000",
-        parse(try_from_str = "parse_length")
+        parse(try_from_str = "parse_packet_length")
     )]
     pub length: usize,
 
@@ -135,7 +135,7 @@ pub struct ArgsConfig {
     pub display_periodicity: usize,
 }
 
-fn parse_length(length: &str) -> Result<usize, PacketLengthError> {
+fn parse_packet_length(length: &str) -> Result<usize, PacketLengthError> {
     let length: usize = length
         .parse()
         .map_err(|error| PacketLengthError::InvalidFormat(error))?;
@@ -147,6 +147,20 @@ fn parse_length(length: &str) -> Result<usize, PacketLengthError> {
     }
 
     Ok(length)
+}
+
+fn parse_display_periodicity(
+    display_periodicity_arg: &str,
+) -> Result<usize, DisplayPeriodicityError> {
+    let periodicity: usize = display_periodicity_arg
+        .parse()
+        .map_err(|error| DisplayPeriodicityError::InvalidFormat(error))?;
+
+    if periodicity == 0 {
+        return Err(DisplayPeriodicityError::ZeroValue);
+    }
+
+    Ok(periodicity)
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -167,18 +181,6 @@ impl Display for PacketLengthError {
 }
 
 impl Error for PacketLengthError {}
-
-fn parse_display_periodicity(periodicity: &str) -> Result<usize, DisplayPeriodicityError> {
-    let periodicity: usize = periodicity
-        .parse()
-        .map_err(|error| DisplayPeriodicityError::InvalidFormat(error))?;
-
-    if periodicity == 0 {
-        return Err(DisplayPeriodicityError::ZeroValue);
-    }
-
-    Ok(periodicity)
-}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum DisplayPeriodicityError {
@@ -204,19 +206,19 @@ mod tests {
     #[test]
     fn parses_ordinary_lengths() {
         // Check that ordinary values are parsed correctly
-        assert_eq!(parse_length("53251"), Ok(53251));
-        assert_eq!(parse_length("26655"), Ok(26655));
-        assert_eq!(parse_length("+75"), Ok(75));
+        assert_eq!(parse_packet_length("53251"), Ok(53251));
+        assert_eq!(parse_packet_length("26655"), Ok(26655));
+        assert_eq!(parse_packet_length("+75"), Ok(75));
 
         // Check that the min and max values are still valid
-        assert_eq!(parse_length("1"), Ok(MIN_PACKET_LENGTH));
-        assert_eq!(parse_length("65000"), Ok(MAX_PACKET_LENGTH));
+        assert_eq!(parse_packet_length("1"), Ok(MIN_PACKET_LENGTH));
+        assert_eq!(parse_packet_length("65000"), Ok(MAX_PACKET_LENGTH));
     }
 
     #[test]
     fn parses_invalid_lengths() {
         let panic_if_invalid = |string| {
-            if let Ok(_) = parse_length(string) {
+            if let Ok(_) = parse_packet_length(string) {
                 panic!("Parses invalid formatted length correctly");
             }
         };
@@ -231,9 +233,9 @@ mod tests {
         panic_if_invalid(&"2178".repeat(50));
 
         // Check that too big and too small values aren't valid
-        assert_eq!(parse_length("0"), Err(PacketLengthError::Underflow));
+        assert_eq!(parse_packet_length("0"), Err(PacketLengthError::Underflow));
         assert_eq!(
-            parse_length("533987721456"),
+            parse_packet_length("533987721456"),
             Err(PacketLengthError::Overflow)
         );
     }
