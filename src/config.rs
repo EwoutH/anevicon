@@ -137,7 +137,7 @@ fn parse_length(length: &str) -> Result<usize, PacketLengthError> {
     Ok(length)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 enum PacketLengthError {
     InvalidFormat(ParseIntError),
     Overflow,
@@ -155,3 +155,45 @@ impl Display for PacketLengthError {
 }
 
 impl Error for PacketLengthError {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parses_ordinary_values() {
+        // Check that ordinary values are parsed correctly
+        assert_eq!(parse_length("53251"), Ok(53251));
+        assert_eq!(parse_length("26655"), Ok(26655));
+        assert_eq!(parse_length("+75"), Ok(75));
+
+        // Check that the min and max values are still valid
+        assert_eq!(parse_length("1"), Ok(MIN_PACKET_LENGTH));
+        assert_eq!(parse_length("65000"), Ok(MAX_PACKET_LENGTH));
+    }
+
+    #[test]
+    fn parses_invalid_values() {
+        let panic_if_invalid = |string| {
+            if let Ok(_) = parse_length(string) {
+                panic!("Parses invalid formatted number correctly");
+            }
+        };
+
+        // Invalid numbers must produce the invalid format error
+        panic_if_invalid("   ");
+
+        panic_if_invalid("abc5653odr!");
+        panic_if_invalid("6485&02hde");
+
+        panic_if_invalid("-565642");
+        panic_if_invalid(&"2178".repeat(50));
+
+        // Check that too big and too small values aren't valid
+        assert_eq!(parse_length("0"), Err(PacketLengthError::Underflow));
+        assert_eq!(
+            parse_length("533987721456"),
+            Err(PacketLengthError::Overflow)
+        );
+    }
+}
