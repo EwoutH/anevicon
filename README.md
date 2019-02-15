@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/badge/crates.io-v0.1.0-orange.svg">
   </a>
   
-  The most powerful UDP-based traffic generator, written in Rust
+  The most powerful UDP-based load generator, written in Rust
 </div>
 
 ## Introduction

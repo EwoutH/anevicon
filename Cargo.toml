@@ -1,6 +1,6 @@
 [package]
 name = "anevicon"
-description = "The most powerful UDP-based traffic generator, written in Rust"
+description = "The most powerful UDP-based load generator, written in Rust"
 repository = "https://github.com/Gymmasssorla/anevicon"
 version = "0.1.0"
 authors = ["Temirkhan Myrzamadi <gymmasssorla@gmail.com>"]
