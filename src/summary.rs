@@ -70,11 +70,12 @@ impl Display for AttackSummary {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         write!(
             fmt,
-            "{} packets with {}MB and the average speed of {} MB/s were sent just in {}",
-            self.packets_sent(),
-            self.megabytes_sent(),
-            self.megabytes_in_sec(),
-            format_duration(self.time_passed())
+            "packets sent: {packets}, megabytes sent: {megabytes}, the average \
+             speed: {speed} MB/s, time passed: {time_passed}",
+            packets = self.packets_sent(),
+            megabytes = self.megabytes_sent(),
+            speed = self.megabytes_in_sec(),
+            time_passed = format_duration(self.time_passed())
         )
     }
 }
