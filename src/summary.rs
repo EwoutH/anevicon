@@ -128,7 +128,7 @@ mod tests {
         assert_eq!(
             summary.megabytes_sent(),
             85 + 23,
-            "The 'AttackSummary' structure truncates decimals incorrectly"
+            "'AttackSummary' truncates decimals incorrectly"
         );
         assert_eq!(summary.packets_sent(), 2698 + 4258 + 5338);
 
@@ -137,12 +137,12 @@ mod tests {
         assert_eq!(
             summary.megabytes_sent(),
             85 + 23,
-            "The 'AttackSummary' hasn't the same megabytes after zero-update"
+            "'AttackSummary' hasn't the same megabytes after zero-update"
         );
         assert_eq!(
             summary.packets_sent(),
             2698 + 4258 + 5338,
-            "The 'AttackSummary' hasn't the same packets after zero-update"
+            "'AttackSummary' hasn't the same packets after zero-update"
         );
     }
 }
