@@ -112,7 +112,7 @@ mod tests {
     }
 
     #[test]
-    fn update_works() {
+    fn ordinary_updates_work() {
         let mut summary = AttackSummary::new();
 
         summary.update(1024 * 1024 * 23, 2698);
@@ -122,25 +122,50 @@ mod tests {
         summary.update(1024 * 1024 * 85, 4258);
         assert_eq!(summary.megabytes_sent(), 85 + 23);
         assert_eq!(summary.packets_sent(), 2698 + 4258);
+    }
+
+    #[test]
+    fn truncate_megabytes_correctly() {
+        let mut summary = AttackSummary::new();
 
         summary.update(1024 * 1023, 5338);
         assert_eq!(
             summary.megabytes_sent(),
-            85 + 23,
-            "'AttackSummary' truncates decimals incorrectly"
+            0,
+            "'AttackSummary' truncates megabytes incorrectly"
         );
-        assert_eq!(summary.packets_sent(), 2698 + 4258 + 5338);
+        assert_eq!(summary.packets_sent(), 5338);
+    }
+
+    #[test]
+    fn zero_update_works() {
+        let mut summary = AttackSummary::new();
+        summary.update(1024 * 1024 * 85, 2698);
 
         summary.update(0, 0);
         assert_eq!(
             summary.megabytes_sent(),
-            85 + 23,
+            85,
             "'AttackSummary' hasn't the same megabytes after zero-update"
         );
         assert_eq!(
             summary.packets_sent(),
-            2698 + 4258 + 5338,
+            2698,
             "'AttackSummary' hasn't the same packets after zero-update"
         );
+    }
+
+    #[test]
+    fn time_passed_works() {
+        let mut summary = AttackSummary::new();
+        let initial_time = Instant::now();
+
+        // Do an arbitrary updates and sleep that take some time
+        for _ in 0..100 {
+            summary.update(1024 * 1024 * 563, 54138);
+            sleep(Duration::from_millis(20));
+        }
+
+        assert!(summary.time_passed() <= initial_time.elapsed());
     }
 }
