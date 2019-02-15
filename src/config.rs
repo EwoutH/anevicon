@@ -30,10 +30,6 @@ use structopt::StructOpt;
 const MIN_PACKET_LENGTH: usize = 1;
 const MAX_PACKET_LENGTH: usize = 65000;
 
-// ################################################################################
-// THE COMMAND-LINE OPTIONS
-// ################################################################################
-
 #[derive(Debug, StructOpt)]
 #[structopt(
     author = "Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>",
@@ -139,10 +135,6 @@ pub struct ArgsConfig {
     pub display_periodicity: usize,
 }
 
-// ################################################################################
-// PACKET LENGTH PARSING
-// ################################################################################
-
 fn parse_length(length: &str) -> Result<usize, PacketLengthError> {
     let length: usize = length
         .parse()
@@ -176,10 +168,6 @@ impl Display for PacketLengthError {
 
 impl Error for PacketLengthError {}
 
-// ################################################################################
-// DISPLAY PERIODICITY PARSING
-// ################################################################################
-
 fn parse_display_periodicity(periodicity: &str) -> Result<usize, DisplayPeriodicityError> {
     let periodicity: usize = periodicity
         .parse()
@@ -208,10 +196,6 @@ impl Display for DisplayPeriodicityError {
 }
 
 impl Error for DisplayPeriodicityError {}
-
-// ################################################################################
-// THE TESTS
-// ################################################################################
 
 #[cfg(test)]
 mod tests {
