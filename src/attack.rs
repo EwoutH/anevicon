@@ -53,9 +53,9 @@ impl<'a> Attacker<'a> {
     }
 
     pub fn attack(&self) {
-        let mut summary = AttackSummary::new();
         self.display_entry_message();
         thread::sleep(self.args_config.waiting);
+        let mut summary = AttackSummary::new();
 
         loop {
             for _ in 0..ATTACKER_DISPLAY_CYCLICALITY {
