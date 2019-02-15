@@ -28,8 +28,6 @@ use humantime::format_duration;
 use log::{error, info};
 use rand::{thread_rng, RngCore};
 
-const ATTACKER_DISPLAY_CYCLICALITY: usize = 500;
-
 #[derive(Debug)]
 pub struct Attacker<'a> {
     socket: UdpSocket,
@@ -58,7 +56,7 @@ impl<'a> Attacker<'a> {
         let mut summary = AttackSummary::new();
 
         loop {
-            for _ in 0..ATTACKER_DISPLAY_CYCLICALITY {
+            for _ in 0..self.args_config.display_periodicity {
                 match self.socket.send(&self.buffer) {
                     Err(error) => {
                         error!("Cannot send the packet to the receiver: {}", error);
