@@ -30,7 +30,7 @@ mod summary;
 fn main() {
     let config = ArgsConfig::from_args();
 
-    if let Err(error) = setup_logging(config.output()) {
+    if let Err(error) = setup_logging(&config.output) {
         raw_exit_with_error(format_args!("Cannot open the output file: {}", error));
     }
 

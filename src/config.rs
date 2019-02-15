@@ -47,7 +47,7 @@ pub struct ArgsConfig {
         value_name = "ADDRESS",
         required = true
     )]
-    receiver: SocketAddr,
+    pub receiver: SocketAddr,
 
     /// A sender of generated traffic, specified as an IP-address
     /// and a port number, separated by the colon character.
@@ -58,7 +58,7 @@ pub struct ArgsConfig {
         value_name = "ADDRESS",
         default_value = "0.0.0.0:0"
     )]
-    sender: SocketAddr,
+    pub sender: SocketAddr,
 
     /// A program working time. The default value is too big, that
     /// is, an attack will be performed until you explicitly stop
@@ -71,7 +71,7 @@ pub struct ArgsConfig {
         default_value = "64years 64hours 64secs",
         parse(try_from_str = "parse_duration")
     )]
-    duration: Duration,
+    pub duration: Duration,
 
     /// A size of each UDP-packet in the range of [1; 65000],
     /// specified in bytes. Note that your system or a victim server
@@ -84,7 +84,7 @@ pub struct ArgsConfig {
         default_value = "65000",
         parse(try_from_str = "parse_length")
     )]
-    length: usize,
+    pub length: usize,
 
     /// A waiting time before an attack execution. It is mainly
     /// used to prevent a launch of an erroneous (unwanted) attack.
@@ -96,7 +96,7 @@ pub struct ArgsConfig {
         default_value = "5secs",
         parse(try_from_str = "parse_duration")
     )]
-    waiting: Duration,
+    pub waiting: Duration,
 
     /// A periodicity of sending packets. The default value equals
     /// to zero seconds, that is, all packets will be sent
@@ -109,7 +109,7 @@ pub struct ArgsConfig {
         default_value = "0secs",
         parse(try_from_str = "parse_duration")
     )]
-    periodicity: Duration,
+    pub periodicity: Duration,
 
     /// A file in which all logging information will be printed.
     /// Note that even with this option, logs will even still be
@@ -120,37 +120,7 @@ pub struct ArgsConfig {
         takes_value = true,
         value_name = "FILENAME"
     )]
-    output: Option<PathBuf>,
-}
-
-impl ArgsConfig {
-    pub fn receiver(&self) -> SocketAddr {
-        self.receiver
-    }
-
-    pub fn sender(&self) -> SocketAddr {
-        self.sender
-    }
-
-    pub fn duration(&self) -> Duration {
-        self.duration
-    }
-
-    pub fn length(&self) -> usize {
-        self.length
-    }
-
-    pub fn waiting(&self) -> Duration {
-        self.waiting
-    }
-
-    pub fn periodicity(&self) -> Duration {
-        self.periodicity
-    }
-
-    pub fn output(&self) -> &Option<PathBuf> {
-        &self.output
-    }
+    pub output: Option<PathBuf>,
 }
 
 fn parse_length(length: &str) -> Result<usize, PacketLengthError> {
