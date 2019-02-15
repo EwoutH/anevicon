@@ -258,7 +258,7 @@ mod tests {
     fn parses_ordinary_display_periodicities() {
         // Check that ordinary values are parsed correctly
         assert_eq!(parse_display_periodicity("1"), Ok(1));
-        assert_eq!(parse_display_periodicity("3"), Ok(75));
+        assert_eq!(parse_display_periodicity("3"), Ok(3));
         assert_eq!(parse_display_periodicity("26655"), Ok(26655));
         assert_eq!(parse_display_periodicity("+75"), Ok(75));
     }
