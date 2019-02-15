@@ -1,4 +1,4 @@
-/* anevicon: The fastest UDP-based server stress-testing tool, written in Rust.
+/* anevicon: The most powerful UDP-based traffic generator, written in Rust.
  * Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
