@@ -135,6 +135,10 @@ mod tests {
             "'AttackSummary' truncates megabytes incorrectly"
         );
         assert_eq!(summary.packets_sent(), 5338);
+
+        // However, we must have one megabyte sent after this update
+        summary.update(1024, 19);
+        assert_eq!(summary.megabytes_sent(), 1);
     }
 
     #[test]
