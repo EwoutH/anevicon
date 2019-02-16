@@ -31,7 +31,7 @@ $ cargo install anevicon
 ## Usage
 ```
 anevicon 0.1.0
-Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>
+Temirkhan Myrzamadi <gymmasssorla@gmail.com>
 An UDP-based server stress-testing tool, written in Rust.
 
 USAGE:
@@ -55,17 +55,21 @@ OPTIONS:
             A size of each UDP-packet in the range of [1; 65000], specified in
             bytes. Note that your system or a victim server might not be able to
             handle the default value. [default: 65000]
-    -p, --periodicity <TIME-SPAN>
-            A periodicity of sending packets. The default value equals to zero
-            seconds, that is, all packets will be sent momentarily. [default:
-            0secs]
+    -p, --packets <COUNT>
+            A count of packets for sending. The default value equals to the
+            largest number available for the inner data type. [default:
+            18446744073709551615]
     -r, --receiver <ADDRESS>
             A receiver of generated traffic, specified as an IP-address and a
             port number, separated by the colon character.
+        --send-periodicity <TIME-SPAN>
+            A periodicity of sending packets. The default value equals to zero
+            seconds, that is, all packets will be sent momentarily. [default:
+            0secs]
     -s, --sender <ADDRESS>
             A sender of generated traffic, specified as an IP-address and a port
             number, separated by the colon character. [default: 0.0.0.0:0]
-    -w, --waiting <TIME-SPAN>
+    -w, --wait <TIME-SPAN>
             A waiting time before an attack execution. It is mainly used to
             prevent a launch of an erroneous (unwanted) attack. [default: 5secs]
 
