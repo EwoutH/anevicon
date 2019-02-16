@@ -14,17 +14,11 @@
     <img src="https://img.shields.io/badge/crates.io-v0.1.0-orange.svg">
   </a>
   
-  <img src="DEMO.gif">
-  <br>Anevicon is a high-performance traffic generator, designed to be as convenient and reliable as it is possible. It sends
+  <img src="DEMO.gif"><br>
+  
+  Anevicon is a high-performance traffic generator, designed to be as convenient and reliable as it is possible. It sends
 numerous UDP-packets to a victim, thereby simulating an activity that can be produced by your end users or a
-group of hackers.<br>
-
-  <h4>
-    <a href="https://github.com/Gymmasssorla/anevicon/releases">Releases</a> &middot;
-    <a href="https://github.com/Gymmasssorla/anevicon/issues">Issues</a> &middot;
-    <a href="https://github.com/Gymmasssorla/anevicon/pulls">Pull requests</a> &middot;
-    <a href="https://github.com/Gymmasssorla/anevicon/wiki">Wiki</a>
-  </h4>
+group of hackers.
 </div>
 
 ## Installation
