@@ -36,9 +36,11 @@ pub struct Attacker<'a> {
 
 impl<'a> Attacker<'a> {
     pub fn from_args_config(args_config: &'a ArgsConfig) -> io::Result<Attacker<'a>> {
+        // Complete any necessary stuff with the specified socket
         let socket = UdpSocket::bind(args_config.sender)?;
         socket.connect(args_config.receiver)?;
 
+        // Generate a random set of bytes into the sending buffer
         let mut buffer = vec![0; args_config.length];
         thread_rng().fill_bytes(buffer.as_mut_slice());
 
