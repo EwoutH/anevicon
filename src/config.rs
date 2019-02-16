@@ -21,7 +21,6 @@ use std::error::Error;
 use std::fmt::{self, Display, Formatter};
 use std::net::SocketAddr;
 use std::num::ParseIntError;
-use std::path::PathBuf;
 use std::time::Duration;
 
 use humantime::parse_duration;
@@ -111,20 +110,9 @@ pub struct ArgsConfig {
     )]
     pub periodicity: Duration,
 
-    /// A file in which all logging information will be printed.
-    /// Note that even with this option, logs will even still be
-    /// written to a terminal too.
-    #[structopt(
-        short = "o",
-        long = "output",
-        takes_value = true,
-        value_name = "FILENAME"
-    )]
-    pub output: Option<PathBuf>,
-
-    /// A count of packets per displaying attack summaries. It is not
-    /// recommended to set this option to a small value (say, 6) for
-    /// the performance reasons.
+    /// A count of packets per displaying attack summaries. It is
+    /// not recommended to set this option to a small value (say, 6)
+    /// for the performance reasons.
     #[structopt(
         long = "display-periodicity",
         takes_value = true,
@@ -133,6 +121,10 @@ pub struct ArgsConfig {
         parse(try_from_str = "parse_display_periodicity")
     )]
     pub display_periodicity: usize,
+
+    /// Enable the debugging mode
+    #[structopt(long = "debug")]
+    pub debug: bool,
 }
 
 fn parse_packet_length(length: &str) -> Result<usize, PacketLengthError> {
@@ -149,10 +141,8 @@ fn parse_packet_length(length: &str) -> Result<usize, PacketLengthError> {
     Ok(length)
 }
 
-fn parse_display_periodicity(
-    display_periodicity_arg: &str,
-) -> Result<usize, DisplayPeriodicityError> {
-    let periodicity: usize = display_periodicity_arg
+fn parse_display_periodicity(periodicity: &str) -> Result<usize, DisplayPeriodicityError> {
+    let periodicity: usize = periodicity
         .parse()
         .map_err(|error| DisplayPeriodicityError::InvalidFormat(error))?;
 

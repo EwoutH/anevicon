@@ -17,20 +17,15 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use std::fmt::Arguments;
-use std::io;
 use std::io::{stderr, stdout};
-use std::path::Path;
 
 use colored::Colorize;
 use fern::colors::{Color, ColoredLevelConfig};
-use fern::{log_file, Dispatch, FormatCallback};
-use log::{Level, Record};
-use termion::color::{self, Cyan, Fg};
-use termion::style::{self, Underline};
+use fern::Dispatch;
+use log::Level;
 use time::{self, strftime};
 
-pub fn setup_logging<P: AsRef<Path>>(output: &Option<P>) -> io::Result<()> {
+pub fn setup_logging(debug: bool) {
     let colors = ColoredLevelConfig::new()
         .info(Color::Green)
         .warn(Color::Yellow)
@@ -38,71 +33,40 @@ pub fn setup_logging<P: AsRef<Path>>(output: &Option<P>) -> io::Result<()> {
         .debug(Color::Magenta)
         .trace(Color::Cyan);
 
-    // The terminal formatter for user messages and debugging
-    let fmt = move |out: FormatCallback, message: &Arguments, record: &Record| {
-        out.finish(format_args!(
-            "{style}{level}{no_style} [{cyan}{date_time}{no_cyan}]: {message}",
-            style = Underline,
-            level = colors.color(record.level()),
-            no_style = style::Reset,
-            cyan = Fg(Cyan),
-            date_time = strftime("%x %X %z", &time::now()).unwrap(),
-            no_cyan = Fg(color::Reset),
-            message = message,
-        ));
-    };
-
-    let mut dispatch = Dispatch::new()
-        // Print all notices, warnings, and errors to stdout
+    Dispatch::new()
+        .format(move |out, message, record| {
+            out.finish(format_args!(
+                "[{anevicon}] {level} [{date_time}]: {message}",
+                anevicon = "anevicon".magenta().bold(),
+                level = colors.color(record.level()).to_string().underline(),
+                date_time = strftime("%x %X %z", &time::now()).unwrap().cyan(),
+                message = message,
+            ));
+        })
+        // Print all traces and debugging information to stderr
         .chain(
             Dispatch::new()
-                .format(fmt)
-                .filter(|metadata| match metadata.level() {
+                .filter(move |metadata| {
+                    if !debug {
+                        return false;
+                    }
+
+                    match metadata.level() {
+                        Level::Info | Level::Warn | Level::Error => false,
+                        Level::Debug | Level::Trace => true,
+                    }
+                })
+                .chain(stderr()),
+        )
+        // Print all notifications, warnings and errors to stdout
+        .chain(
+            Dispatch::new()
+                .filter(move |metadata| match metadata.level() {
                     Level::Info | Level::Warn | Level::Error => true,
                     Level::Debug | Level::Trace => false,
                 })
                 .chain(stdout()),
         )
-        // Print all traces and debugging information to stderr
-        .chain(
-            Dispatch::new()
-                .format(fmt)
-                .filter(|metadata| match metadata.level() {
-                    Level::Info | Level::Warn | Level::Error => false,
-                    Level::Debug | Level::Trace => true,
-                })
-                .chain(stderr()),
-        );
-
-    // Add an output logging file if it was specified by a user
-    if let Some(filename) = output {
-        dispatch = dispatch.chain(
-            Dispatch::new()
-                .format(|out, message, record| {
-                    out.finish(format_args!(
-                        "[anevicon] {level} [{date_time}]: {message}",
-                        level = record.level(),
-                        date_time = strftime("%x %X %z", &time::now()).unwrap(),
-                        message = message,
-                    ));
-                })
-                .chain(log_file(filename)?),
-        );
-    }
-
-    dispatch
         .apply()
         .expect("Cannot correctly setup the logging system");
-    Ok(())
-}
-
-// Prints an error message even without a configured logging system
-pub fn raw_exit_with_error(message: Arguments) -> ! {
-    println!(
-        "{error} [{date_time}]: {message}",
-        error = "ERROR".red().underline(),
-        date_time = strftime("%x %X %z", &time::now()).unwrap().cyan(),
-        message = message
-    );
-    std::process::exit(1);
 }

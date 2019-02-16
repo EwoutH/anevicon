@@ -79,27 +79,16 @@ impl<'a> Attacker<'a> {
     }
 
     fn display_entry_message(&self) {
-        let output = match self.args_config.output {
-            Some(ref filename) => String::from(
-                filename
-                    .as_path()
-                    .to_str()
-                    .expect("The output file contains invalid unicode"),
-            ),
-            None => String::from("<unspecified output>"),
-        };
-
         info!(
             "The program is starting to attack using receiver: {receiver}, \
              sender: {sender}, length: {length}, periodicity: {periodicity}, \
-             duration: {duration}, waiting: {waiting}, output: {output}",
+             duration: {duration}, waiting: {waiting}",
             receiver = self.args_config.receiver,
             sender = self.args_config.sender,
             length = self.args_config.length,
             periodicity = format_duration(self.args_config.periodicity),
             duration = format_duration(self.args_config.duration),
             waiting = format_duration(self.args_config.waiting),
-            output = output
         );
     }
 }

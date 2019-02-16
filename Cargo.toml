@@ -14,7 +14,6 @@ edition = "2018"
 fern = { version = "0.5.7", features = ["colored"] }
 log = "0.4.6"
 time = "0.1.42"
-termion = "1.5.1"
 humantime = "1.2.0"
 colored = "1.7.0"
 structopt = "0.2.14"
