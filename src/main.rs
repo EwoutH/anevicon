@@ -44,7 +44,10 @@ fn main() {
         Ok(attacker) => attacker,
     };
 
-    attacker.attack();
+    if let Err(error) = attacker.attack() {
+        error!("An error occurred during the attack: {}", error);
+        std::process::exit(1);
+    }
 }
 
 fn display_title() {

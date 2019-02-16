@@ -24,7 +24,7 @@ use std::thread;
 use super::config::ArgsConfig;
 use super::summary::AttackSummary;
 
-use log::{error, info};
+use log::info;
 use rand::{thread_rng, RngCore};
 
 #[derive(Debug)]
@@ -51,7 +51,7 @@ impl<'a> Attacker<'a> {
         })
     }
 
-    pub fn attack(&self) {
+    pub fn attack(&self) -> io::Result<()> {
         info!(
             "The program is starting to attack with {}",
             self.args_config
@@ -62,18 +62,11 @@ impl<'a> Attacker<'a> {
 
         loop {
             for _ in 0..self.args_config.display_periodicity {
-                match self.socket.send(&self.buffer) {
-                    Err(error) => {
-                        error!("Cannot send the packet to the receiver: {}", error);
-                    }
-                    Ok(bytes_sent) => {
-                        summary.update(bytes_sent, 1);
-                    }
-                }
+                summary.update(self.socket.send(&self.buffer)?, 1);
 
                 if summary.time_passed() >= self.args_config.duration {
                     info!("Stopping the packet sending due to the expired time");
-                    return;
+                    return Ok(());
                 }
 
                 thread::sleep(self.args_config.periodicity);
