@@ -17,6 +17,8 @@
   </a>
   
   The most powerful UDP-based load generator, written in Rust
+
+  <img src="DEMO.gif">
 </div>
 
 ## Introduction
