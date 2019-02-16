@@ -20,7 +20,7 @@
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};
 use std::net::SocketAddr;
-use std::num::ParseIntError;
+use std::num::{NonZeroUsize, ParseIntError};
 use std::time::Duration;
 
 use humantime::{format_duration, parse_duration};
@@ -117,9 +117,21 @@ pub struct ArgsConfig {
         takes_value = true,
         value_name = "PACKETS",
         default_value = "300",
-        parse(try_from_str = "parse_display_periodicity")
+        parse(try_from_str = "parse_non_zero_usize")
     )]
-    pub display_periodicity: usize,
+    pub display_periodicity: NonZeroUsize,
+
+    /// A count of packets for sending. The default value equals to
+    /// the largest number available for the inner data type.
+    #[structopt(
+        short = "p",
+        long = "packets",
+        takes_value = true,
+        value_name = "COUNT",
+        default_value = "18446744073709551615",
+        parse(try_from_str = "parse_non_zero_usize")
+    )]
+    pub packets: NonZeroUsize,
 
     /// Enable the debugging mode
     #[structopt(long = "debug")]
@@ -134,17 +146,19 @@ impl Display for ArgsConfig {
              sender: {sender}, \
              duration: {duration}, \
              length: {length}, \
-             waiting: {waiting}, \
-             periodicity: {periodicity}, \
-             display_periodicity: {display_periodicity}, \
+             wait: {wait}, \
+             send-periodicity: {send_periodicity}, \
+             display-periodicity: {display_periodicity}, \
+             packets: {packets}, \
              debug: {debug}",
             receiver = self.receiver,
             sender = self.sender,
             duration = format_duration(self.duration),
             length = self.length,
-            waiting = format_duration(self.wait),
-            periodicity = format_duration(self.send_periodicity),
+            wait = format_duration(self.wait),
+            send_periodicity = format_duration(self.send_periodicity),
             display_periodicity = self.display_periodicity,
+            packets = self.packets,
             debug = self.debug,
         )
     }
@@ -164,16 +178,12 @@ fn parse_packet_length(length: &str) -> Result<usize, PacketLengthError> {
     Ok(length)
 }
 
-fn parse_display_periodicity(periodicity: &str) -> Result<usize, DisplayPeriodicityError> {
-    let periodicity: usize = periodicity
+fn parse_non_zero_usize(number: &str) -> Result<NonZeroUsize, NonZeroUsizeError> {
+    let number: usize = number
         .parse()
-        .map_err(|error| DisplayPeriodicityError::InvalidFormat(error))?;
+        .map_err(|error| NonZeroUsizeError::InvalidFormat(error))?;
 
-    if periodicity == 0 {
-        return Err(DisplayPeriodicityError::ZeroValue);
-    }
-
-    Ok(periodicity)
+    NonZeroUsize::new(number).ok_or(NonZeroUsizeError::ZeroValue)
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -196,21 +206,21 @@ impl Display for PacketLengthError {
 impl Error for PacketLengthError {}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-enum DisplayPeriodicityError {
+enum NonZeroUsizeError {
     InvalidFormat(ParseIntError),
     ZeroValue,
 }
 
-impl Display for DisplayPeriodicityError {
+impl Display for NonZeroUsizeError {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         match self {
-            DisplayPeriodicityError::InvalidFormat(error) => write!(fmt, "{}", error),
-            DisplayPeriodicityError::ZeroValue => write!(fmt, "The value equals to zero"),
+            NonZeroUsizeError::InvalidFormat(error) => write!(fmt, "{}", error),
+            NonZeroUsizeError::ZeroValue => write!(fmt, "The value equals to zero"),
         }
     }
 }
 
-impl Error for DisplayPeriodicityError {}
+impl Error for NonZeroUsizeError {}
 
 #[cfg(test)]
 mod tests {
@@ -254,19 +264,33 @@ mod tests {
     }
 
     #[test]
-    fn parses_ordinary_display_periodicities() {
-        // Check that ordinary values are parsed correctly
-        assert_eq!(parse_display_periodicity("1"), Ok(1));
-        assert_eq!(parse_display_periodicity("3"), Ok(3));
-        assert_eq!(parse_display_periodicity("26655"), Ok(26655));
-        assert_eq!(parse_display_periodicity("+75"), Ok(75));
+    fn parses_ordinary_non_zero_usize() {
+        unsafe {
+            // Check that ordinary values are parsed correctly
+            assert_eq!(
+                parse_non_zero_usize("1"),
+                Ok(NonZeroUsize::new_unchecked(1))
+            );
+            assert_eq!(
+                parse_non_zero_usize("3"),
+                Ok(NonZeroUsize::new_unchecked(3))
+            );
+            assert_eq!(
+                parse_non_zero_usize("26655"),
+                Ok(NonZeroUsize::new_unchecked(26655))
+            );
+            assert_eq!(
+                parse_non_zero_usize("+75"),
+                Ok(NonZeroUsize::new_unchecked(75))
+            );
+        }
     }
 
     #[test]
-    fn parses_invalid_display_periodicities() {
+    fn parses_invalid_non_zero_usize() {
         let panic_if_invalid = |string| {
-            if let Ok(_) = parse_display_periodicity(string) {
-                panic!("Parses invalid formatted display periodicity correctly");
+            if let Ok(_) = parse_non_zero_usize(string) {
+                panic!("Parses invalid formatted usize correctly");
             }
         };
 
@@ -279,10 +303,7 @@ mod tests {
         panic_if_invalid("-565642");
         panic_if_invalid(&"2178".repeat(50));
 
-        // Check that the zero periodicity is not allowed
-        assert_eq!(
-            parse_display_periodicity("0"),
-            Err(DisplayPeriodicityError::ZeroValue)
-        );
+        // Check that the zero value is not allowed
+        assert_eq!(parse_non_zero_usize("0"), Err(NonZeroUsizeError::ZeroValue));
     }
 }

@@ -61,11 +61,21 @@ impl<'a> Attacker<'a> {
         let mut summary = AttackSummary::new();
 
         loop {
-            for _ in 0..self.args_config.display_periodicity {
+            for _ in 0..self.args_config.display_periodicity.get() {
                 summary.update(self.socket.send(&self.buffer)?, 1);
 
                 if summary.time_passed() >= self.args_config.duration {
-                    info!("Stopping the packet sending due to the expired time");
+                    info!(
+                        "The program is stopping the packet sending because \
+                         the allotted time has passed"
+                    );
+                    return Ok(());
+                }
+                if summary.packets_sent() == self.args_config.packets.get() {
+                    info!(
+                        "The program is stopping the packet sending because \
+                         all the required packets were sent"
+                    );
                     return Ok(());
                 }
 
