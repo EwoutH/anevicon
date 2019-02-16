@@ -23,7 +23,7 @@
 Anevicon is a high-performance traffic generator, designed to be as convenient and reliable as it is possible. It sends numerous heavy UDP-packets to a victim web server, thereby simulating an activity that can be produced by your end users or a group of hackers.
 
 ## Installation
-You can install Anevicon on your system either by downloading the precompiled binaries from the [releases](https://github.com/Gymmasssorla/anevicon/releases) page or by compiling it on your own computer. The second way is more recommended due to the performance reasons, and this how it is done:
+You can install Anevicon on your system either by downloading the precompiled binaries from the [releases](https://github.com/Gymmasssorla/anevicon/releases) page or by compiling it on your own computer. The second way is more recommended due to the performance reasons, and this is command for it:
 ```bash
 $ cargo install anevicon
 ```
