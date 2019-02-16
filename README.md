@@ -1,3 +1,5 @@
+> Warning: this crate is not published at crates.io yet because it's quite unstable now.
+
 <div align="center">
   <h1>anevicon</h1>
   
@@ -21,10 +23,7 @@ numerous UDP-packets to a victim, thereby simulating an activity that can be pro
 group of hackers.
 </div>
 
-> Warning: this crate is not published at crates.io yet because it's quite unstable now.
-
 ## Installation
-You can install Anevicon on your system either by downloading the precompiled binaries from the [releases](https://github.com/Gymmasssorla/anevicon/releases) page or by compiling it on your own computer. The second way is more recommended due to the performance reasons, so just type:
 ```bash
 $ cargo install anevicon
 ```
