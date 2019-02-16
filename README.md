@@ -1,7 +1,6 @@
 > Warning: this crate is not published at crates.io yet because it's quite unstable now.
 
 <div align="center">
-  <img src="DEMO.gif">
   <h1>anevicon</h1>
   
   <a href="https://gitter.im/Gymmasssorla/anevicon">
@@ -17,6 +16,7 @@
     <img src="https://img.shields.io/badge/crates.io-v0.1.0-orange.svg">
   </a>
   
+  <img src="DEMO.gif">
   The most powerful UDP-based load generator, written in Rust
 </div>
 
