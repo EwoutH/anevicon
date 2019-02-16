@@ -17,7 +17,6 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
-use colored::Colorize;
 use log::error;
 use structopt::StructOpt;
 
@@ -34,7 +33,6 @@ fn main() {
     let config = ArgsConfig::from_args();
 
     setup_logging(config.debug);
-    display_title();
 
     let attacker = match Attacker::from_args_config(&config) {
         Err(error) => {
@@ -48,33 +46,4 @@ fn main() {
         error!("An error occurred during the attack: {}", error);
         std::process::exit(1);
     }
-}
-
-fn display_title() {
-    println!(
-        "       {}",
-        r"                        _                 ".red()
-    );
-    println!(
-        "       {}",
-        r"  __ _ _ __   _____   _(_) ___ ___  _ __  ".red()
-    );
-    println!(
-        "       {}",
-        r" / _` | '_ \ / _ \ \ / / |/ __/ _ \| '_ \ ".red()
-    );
-    println!(
-        "       {}",
-        r"| (_| | | | |  __/\ V /| | (_| (_) | | | |".red()
-    );
-    println!(
-        "       {}",
-        r" \__,_|_| |_|\___| \_/ |_|\___\___/|_| |_|".red()
-    );
-    println!(
-        "{}",
-        "An UDP-based server stress-testing tool, written in Rust\n"
-            .yellow()
-            .underline()
-    );
 }
