@@ -57,7 +57,7 @@ impl<'a> Attacker<'a> {
             self.args_config
         );
 
-        thread::sleep(self.args_config.waiting);
+        thread::sleep(self.args_config.wait);
         let mut summary = AttackSummary::new();
 
         loop {

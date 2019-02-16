@@ -89,13 +89,13 @@ pub struct ArgsConfig {
     /// used to prevent a launch of an erroneous (unwanted) attack.
     #[structopt(
         short = "w",
-        long = "waiting",
+        long = "wait",
         takes_value = true,
         value_name = "TIME-SPAN",
         default_value = "5secs",
         parse(try_from_str = "parse_duration")
     )]
-    pub waiting: Duration,
+    pub wait: Duration,
 
     /// A periodicity of sending packets. The default value equals
     /// to zero seconds, that is, all packets will be sent
@@ -142,7 +142,7 @@ impl Display for ArgsConfig {
             sender = self.sender,
             duration = format_duration(self.duration),
             length = self.length,
-            waiting = format_duration(self.waiting),
+            waiting = format_duration(self.wait),
             periodicity = format_duration(self.send_periodicity),
             display_periodicity = self.display_periodicity,
             debug = self.debug,
