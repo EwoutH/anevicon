@@ -31,7 +31,7 @@ const MAX_PACKET_LENGTH: usize = 65000;
 
 #[derive(Debug, StructOpt)]
 #[structopt(
-    author = "Copyright (C) 2019  Temirkhan Myrzamadi <gymmasssorla@gmail.com>",
+    author = "Temirkhan Myrzamadi <gymmasssorla@gmail.com>",
     about = "An UDP-based server stress-testing tool, written in Rust.",
     after_help = "For more information see <https://github.com/Gymmasssorla/anevicon>.",
     set_term_width = 80
