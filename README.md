@@ -2,6 +2,7 @@
 
 <div align="center">
   <h1>anevicon</h1>
+  <img src="DEMO.gif">
   
   <a href="https://gitter.im/Gymmasssorla/anevicon">
     <img src="https://img.shields.io/badge/chat-on%20gitter-pink.svg">
@@ -17,8 +18,6 @@
   </a>
   
   The most powerful UDP-based load generator, written in Rust
-
-  <img src="DEMO.gif">
 </div>
 
 ## Introduction
