@@ -19,9 +19,11 @@
 numerous UDP-packets to a victim, thereby simulating an activity that can be produced by your end users or a
 group of hackers.<br>
 
-  <a href="https://github.com/Gymmasssorla/anevicon/releases">Releases</a> &middot;
-  <a href="https://github.com/Gymmasssorla/anevicon/issues">Issues</a> &middot;
-  <a href="https://github.com/Gymmasssorla/anevicon/pulls">Pulls</a> &middot;
+  <h4>
+    <a href="https://github.com/Gymmasssorla/anevicon/releases">Releases</a> &middot;
+    <a href="https://github.com/Gymmasssorla/anevicon/issues">Issues</a> &middot;
+    <a href="https://github.com/Gymmasssorla/anevicon/pulls">Pulls</a>
+  </h4>
 </div>
 
 ## Installation
