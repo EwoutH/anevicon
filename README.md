@@ -22,7 +22,7 @@ group of hackers.<br>
   <h4>
     <a href="https://github.com/Gymmasssorla/anevicon/releases">Releases</a> &middot;
     <a href="https://github.com/Gymmasssorla/anevicon/issues">Issues</a> &middot;
-    <a href="https://github.com/Gymmasssorla/anevicon/pulls">Pulls</a> &middot;
+    <a href="https://github.com/Gymmasssorla/anevicon/pulls">Pull requests</a> &middot;
     <a href="https://github.com/Gymmasssorla/anevicon/wiki">Wiki</a>
   </h4>
 </div>
