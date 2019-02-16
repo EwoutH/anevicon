@@ -51,7 +51,7 @@ impl<'a> Attacker<'a> {
         })
     }
 
-    pub fn attack(&self) -> io::Result<()> {
+    pub fn attack(&self) -> io::Result<AttackSummary> {
         info!(
             "The program is starting to attack with {}",
             self.args_config
@@ -67,16 +67,18 @@ impl<'a> Attacker<'a> {
                 if summary.time_passed() >= self.args_config.duration {
                     info!(
                         "The program is stopping the packet sending because \
-                         the allotted time has passed"
+                         the allotted time has passed. The total result is: {}",
+                        summary
                     );
-                    return Ok(());
+                    return Ok(summary);
                 }
                 if summary.packets_sent() == self.args_config.packets.get() {
                     info!(
                         "The program is stopping the packet sending because \
-                         all the required packets were sent"
+                         all the required packets were sent. The total result is: {}",
+                        summary
                     );
-                    return Ok(());
+                    return Ok(summary);
                 }
 
                 thread::sleep(self.args_config.send_periodicity);
