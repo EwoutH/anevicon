@@ -24,7 +24,6 @@ use std::thread;
 use super::config::ArgsConfig;
 use super::summary::AttackSummary;
 
-use humantime::format_duration;
 use log::{error, info};
 use rand::{thread_rng, RngCore};
 
@@ -51,7 +50,11 @@ impl<'a> Attacker<'a> {
     }
 
     pub fn attack(&self) {
-        self.display_entry_message();
+        info!(
+            "The program is starting to attack with {}",
+            self.args_config
+        );
+
         thread::sleep(self.args_config.waiting);
         let mut summary = AttackSummary::new();
 
@@ -76,19 +79,5 @@ impl<'a> Attacker<'a> {
 
             info!("{}", summary);
         }
-    }
-
-    fn display_entry_message(&self) {
-        info!(
-            "The program is starting to attack using receiver: {receiver}, \
-             sender: {sender}, length: {length}, periodicity: {periodicity}, \
-             duration: {duration}, waiting: {waiting}",
-            receiver = self.args_config.receiver,
-            sender = self.args_config.sender,
-            length = self.args_config.length,
-            periodicity = format_duration(self.args_config.periodicity),
-            duration = format_duration(self.args_config.duration),
-            waiting = format_duration(self.args_config.waiting),
-        );
     }
 }

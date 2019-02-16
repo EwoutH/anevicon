@@ -23,7 +23,7 @@ use std::net::SocketAddr;
 use std::num::ParseIntError;
 use std::time::Duration;
 
-use humantime::parse_duration;
+use humantime::{format_duration, parse_duration};
 use structopt::StructOpt;
 
 const MIN_PACKET_LENGTH: usize = 1;
@@ -125,6 +125,30 @@ pub struct ArgsConfig {
     /// Enable the debugging mode
     #[structopt(long = "debug")]
     pub debug: bool,
+}
+
+impl Display for ArgsConfig {
+    fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
+        write!(
+            fmt,
+            "Receiver: {receiver}, \
+             sender: {sender}, \
+             duration: {duration}, \
+             length: {length}, \
+             waiting: {waiting}, \
+             periodicity: {periodicity}, \
+             display_periodicity: {display_periodicity}, \
+             debug: {debug}",
+            receiver = self.receiver,
+            sender = self.sender,
+            duration = format_duration(self.duration),
+            length = self.length,
+            waiting = format_duration(self.waiting),
+            periodicity = format_duration(self.periodicity),
+            display_periodicity = self.display_periodicity,
+            debug = self.debug,
+        )
+    }
 }
 
 fn parse_packet_length(length: &str) -> Result<usize, PacketLengthError> {
