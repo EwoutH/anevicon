@@ -69,7 +69,7 @@ impl<'a> Attacker<'a> {
                     return Ok(());
                 }
 
-                thread::sleep(self.args_config.periodicity);
+                thread::sleep(self.args_config.send_periodicity);
             }
 
             info!("{}", summary);

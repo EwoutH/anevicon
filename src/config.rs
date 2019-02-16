@@ -101,14 +101,13 @@ pub struct ArgsConfig {
     /// to zero seconds, that is, all packets will be sent
     /// momentarily.
     #[structopt(
-        short = "p",
-        long = "periodicity",
+        long = "send-periodicity",
         takes_value = true,
         value_name = "TIME-SPAN",
         default_value = "0secs",
         parse(try_from_str = "parse_duration")
     )]
-    pub periodicity: Duration,
+    pub send_periodicity: Duration,
 
     /// A count of packets per displaying attack summaries. It is
     /// not recommended to set this option to a small value (say, 6)
@@ -144,7 +143,7 @@ impl Display for ArgsConfig {
             duration = format_duration(self.duration),
             length = self.length,
             waiting = format_duration(self.waiting),
-            periodicity = format_duration(self.periodicity),
+            periodicity = format_duration(self.send_periodicity),
             display_periodicity = self.display_periodicity,
             debug = self.debug,
         )
