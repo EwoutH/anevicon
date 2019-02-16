@@ -16,8 +16,7 @@
     <img src="https://img.shields.io/badge/crates.io-v0.1.0-orange.svg">
   </a>
   
-  <img src="DEMO.gif"><br>
-  The most powerful UDP-based load generator, written in Rust
+  <img src="DEMO.gif">
 </div>
 
 ## Introduction
