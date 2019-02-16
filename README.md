@@ -1,5 +1,3 @@
-> Warning: this crate is not published at crates.io yet because it's quite unstable now.
-
 <div align="center">
   <h1>anevicon</h1>
   
