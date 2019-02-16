@@ -3,6 +3,7 @@
 <div align="center">
   <h1>anevicon</h1>
   <img src="DEMO.gif">
+  <hr>
   
   <a href="https://gitter.im/Gymmasssorla/anevicon">
     <img src="https://img.shields.io/badge/chat-on%20gitter-pink.svg">
