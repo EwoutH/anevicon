@@ -154,6 +154,11 @@ pub struct ArgsConfig {
 
 impl Display for ArgsConfig {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
+        let send_timeout = match self.send_timeout {
+            Some(given_timeout) => format_duration(given_timeout).to_string(),
+            None => String::from("infinity"),
+        };
+
         write!(
             fmt,
             "receiver: {receiver}, \
@@ -164,6 +169,7 @@ impl Display for ArgsConfig {
              send-periodicity: {send_periodicity}, \
              display-periodicity: {display_periodicity}, \
              packets: {packets}, \
+             send-timeout: {send_timeout}, \
              debug: {debug}",
             receiver = self.receiver,
             sender = self.sender,
@@ -173,6 +179,7 @@ impl Display for ArgsConfig {
             send_periodicity = format_duration(self.send_periodicity),
             display_periodicity = self.display_periodicity,
             packets = self.packets,
+            send_timeout = send_timeout,
             debug = self.debug,
         )
     }
