@@ -21,7 +21,6 @@ numerous UDP-packets to a victim, thereby simulating an activity that can be pro
 group of hackers.
 </div>
 
-## Disclaimer
 > Anevivon is still under heavy development process and it is quite unstable now, not all options are implemented, and not all things are tested as it should. Feel free to contribute, add more features, debate with others, and suggest your genius ideas!
 
 ## Installation
