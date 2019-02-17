@@ -36,14 +36,14 @@ fn main() {
 
     let attacker = match Attacker::from_args_config(&config) {
         Err(error) => {
-            error!("Cannot setup the attacker: {}", error);
+            error!("Cannot setup the attacker: {}!", error);
             std::process::exit(1);
         }
         Ok(attacker) => attacker,
     };
 
     if let Err(error) = attacker.attack() {
-        error!("An error occurred during the attack: {}", error);
+        error!("An error occurred during the attack: {}!", error);
         std::process::exit(1);
     }
 }
