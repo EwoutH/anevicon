@@ -76,7 +76,7 @@ For more information see <https://github.com/Gymmasssorla/anevicon>.
 
 
 ## Cautions
- - The goal of Anevicon is to produce the maximum possible (for the attacking system) load on the specified victim address. Thereby, this does not mean that Anevicon will break absolutely any server while running on your computer.
+ - The goal of Anevicon is to produce the maximum possible (for the attacking system) load on the specified victim address. Thereby, this **DOES NOT MEAN** that Anevicon will break absolutely any server while running on your computer.
  
  - Anevicon was developed as a means of testing the stress resistance of servers, and not for hacking, that is, the author of the project **IS NOT RESPONSIBLE** for any damage caused by your use of my program. See [the license notice](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE#L600).
  
