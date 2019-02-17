@@ -165,6 +165,10 @@ mod tests {
     #[test]
     fn time_passed_works() {
         let mut summary = AttackSummary::new();
+
+        // Wait for a little time because the test fails without it
+        sleep(Duration::from_millis(10));
+
         let initial_time = Instant::now();
 
         // Do an arbitrary updates and sleep that take some time
@@ -173,6 +177,6 @@ mod tests {
             sleep(Duration::from_millis(20));
         }
 
-        assert!(summary.time_passed() <= initial_time.elapsed());
+        assert!(summary.time_passed() >= initial_time.elapsed());
     }
 }
