@@ -136,8 +136,8 @@ mod tests {
     #[test]
     fn sends_all_packets() {
         // Assign a very low required packets count to prevent our
-        // lovely Travis CI for a shameful breaking :)))
-        const REQUIRED_PACKETS: NonZeroUsize = unsafe { NonZeroUsize::new_unchecked(50) };
+        // lovely Travis CI and your computer for a shameful breaking :)))
+        const REQUIRED_PACKETS: NonZeroUsize = unsafe { NonZeroUsize::new_unchecked(25) };
 
         // Setup the testing server and modify the default config
         let server = setup_server();
