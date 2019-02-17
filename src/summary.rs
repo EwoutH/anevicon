@@ -128,7 +128,7 @@ mod tests {
     }
 
     #[test]
-    fn truncate_megabytes_correctly() {
+    fn truncates_megabytes_correctly() {
         let mut summary = AttackSummary::new();
 
         summary.update(1024 * 1023, 5338);

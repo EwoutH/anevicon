@@ -19,6 +19,7 @@
 
 use std::io;
 use std::net::UdpSocket;
+use std::num::NonZeroUsize;
 use std::thread;
 
 use super::config::ArgsConfig;
@@ -40,20 +41,23 @@ impl<'a> Attacker<'a> {
         let socket = UdpSocket::bind(args_config.sender)?;
         socket.connect(args_config.receiver)?;
 
+        Ok(Attacker {
+            socket,
+            buffer: Attacker::random_buffer(args_config.length),
+            args_config,
+        })
+    }
+
+    fn random_buffer(length: NonZeroUsize) -> Vec<u8> {
         // Create a sending buffer without an unnecessary initialization
         // because we'll fill this buffer with random values next.
-        let mut buffer = Vec::with_capacity(args_config.length);
+        let mut buffer = Vec::with_capacity(length.get());
         unsafe {
-            buffer.set_len(args_config.length);
+            buffer.set_len(length.get());
         }
 
         thread_rng().fill_bytes(buffer.as_mut_slice());
-
-        Ok(Attacker {
-            socket,
-            buffer,
-            args_config,
-        })
+        buffer
     }
 
     pub fn attack(&self) -> io::Result<AttackSummary> {
@@ -91,5 +95,54 @@ impl<'a> Attacker<'a> {
 
             info!("The attack is running with {}.", summary);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn setup_server() -> UdpSocket {
+        UdpSocket::bind("0.0.0.0:0")
+            .expect("Cannot setup the testing server with the address 0.0.0.0:0")
+    }
+
+    fn default_config(server: &UdpSocket) -> ArgsConfig {
+        ArgsConfig::default_with_receiver(
+            server
+                .local_addr()
+                .expect("Cannot get the testing server local address"),
+        )
+    }
+
+    #[test]
+    fn generates_random_buffer() {
+        let length = unsafe { NonZeroUsize::new_unchecked(35684) };
+        let buffer = Attacker::random_buffer(length);
+
+        // Check that we've got the correctly length and capacity
+        assert_eq!(buffer.len(), length.get());
+        assert!(buffer.capacity() >= length.get());
+    }
+
+    #[test]
+    fn sends_all_packets() {
+        // Assign a very low required packets count to prevent our
+        // lovely Travis CI for a shameful breaking :)))
+        const REQUIRED_PACKETS: NonZeroUsize = unsafe { NonZeroUsize::new_unchecked(50) };
+
+        // Setup the testing server and modify the default config
+        let server = setup_server();
+        let mut config = default_config(&server);
+        config.packets = REQUIRED_PACKETS;
+
+        assert_eq!(
+            Attacker::from_args_config(&config)
+                .expect("Cannot setup the testing attacker")
+                .attack()
+                .expect("The testing attack has returned an error")
+                .packets_sent(),
+            REQUIRED_PACKETS.get()
+        );
     }
 }

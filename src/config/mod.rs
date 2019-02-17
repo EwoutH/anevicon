@@ -29,8 +29,8 @@ use parsers::{parse_non_zero_usize, parse_packet_length};
 
 mod parsers;
 
-const MIN_PACKET_LENGTH: usize = 1;
-const MAX_PACKET_LENGTH: usize = 65000;
+pub const MIN_PACKET_LENGTH: usize = 1;
+pub const MAX_PACKET_LENGTH: usize = 65000;
 
 #[derive(Debug, StructOpt)]
 #[structopt(
@@ -86,7 +86,7 @@ pub struct ArgsConfig {
         default_value = "65000",
         parse(try_from_str = "parse_packet_length")
     )]
-    pub length: usize,
+    pub length: NonZeroUsize,
 
     /// A waiting time before an attack execution. It is mainly
     /// used to prevent a launch of an erroneous (unwanted) attack.
@@ -139,6 +139,53 @@ pub struct ArgsConfig {
     /// Enable the debugging mode
     #[structopt(long = "debug")]
     pub debug: bool,
+}
+
+impl ArgsConfig {
+    pub fn default_with_receiver(receiver: SocketAddr) -> ArgsConfig {
+        ArgsConfig {
+            receiver,
+            sender: ArgsConfig::default_sender(),
+            duration: ArgsConfig::default_duration(),
+            length: ArgsConfig::default_length(),
+            wait: ArgsConfig::default_wait(),
+            send_periodicity: ArgsConfig::default_send_periodicity(),
+            display_periodicity: ArgsConfig::default_display_periodicity(),
+            packets: ArgsConfig::default_packets(),
+            debug: ArgsConfig::default_debug(),
+        }
+    }
+    pub fn default_sender() -> SocketAddr {
+        "0.0.0.0:0".parse().unwrap()
+    }
+
+    pub fn default_duration() -> Duration {
+        parse_duration("64years 64hours 64secs").unwrap()
+    }
+
+    pub fn default_length() -> NonZeroUsize {
+        unsafe { NonZeroUsize::new_unchecked(MAX_PACKET_LENGTH) }
+    }
+
+    pub fn default_wait() -> Duration {
+        parse_duration("5s").unwrap()
+    }
+
+    pub fn default_send_periodicity() -> Duration {
+        parse_duration("0s").unwrap()
+    }
+
+    pub fn default_display_periodicity() -> NonZeroUsize {
+        unsafe { NonZeroUsize::new_unchecked(300) }
+    }
+
+    pub fn default_packets() -> NonZeroUsize {
+        unsafe { NonZeroUsize::new_unchecked(std::usize::MAX) }
+    }
+
+    pub fn default_debug() -> bool {
+        false
+    }
 }
 
 impl Display for ArgsConfig {

@@ -23,7 +23,7 @@ use std::num::{NonZeroUsize, ParseIntError};
 
 use super::{MAX_PACKET_LENGTH, MIN_PACKET_LENGTH};
 
-pub fn parse_packet_length(length: &str) -> Result<usize, PacketLengthError> {
+pub fn parse_packet_length(length: &str) -> Result<NonZeroUsize, PacketLengthError> {
     let length: usize = length
         .parse()
         .map_err(|error| PacketLengthError::InvalidFormat(error))?;
@@ -34,7 +34,7 @@ pub fn parse_packet_length(length: &str) -> Result<usize, PacketLengthError> {
         return Err(PacketLengthError::Overflow);
     }
 
-    Ok(length)
+    NonZeroUsize::new(length).ok_or(PacketLengthError::Underflow)
 }
 
 pub fn parse_non_zero_usize(number: &str) -> Result<NonZeroUsize, NonZeroUsizeError> {
@@ -87,14 +87,31 @@ mod tests {
 
     #[test]
     fn parses_ordinary_lengths() {
-        // Check that ordinary values are parsed correctly
-        assert_eq!(parse_packet_length("53251"), Ok(53251));
-        assert_eq!(parse_packet_length("26655"), Ok(26655));
-        assert_eq!(parse_packet_length("+75"), Ok(75));
+        unsafe {
+            // Check that ordinary values are parsed correctly
+            assert_eq!(
+                parse_packet_length("53251"),
+                Ok(NonZeroUsize::new_unchecked(53251))
+            );
+            assert_eq!(
+                parse_packet_length("26655"),
+                Ok(NonZeroUsize::new_unchecked(26655))
+            );
+            assert_eq!(
+                parse_packet_length("+75"),
+                Ok(NonZeroUsize::new_unchecked(75))
+            );
 
-        // Check that the min and max values are still valid
-        assert_eq!(parse_packet_length("1"), Ok(MIN_PACKET_LENGTH));
-        assert_eq!(parse_packet_length("65000"), Ok(MAX_PACKET_LENGTH));
+            // Check that the min and max values are still valid
+            assert_eq!(
+                parse_packet_length("1"),
+                Ok(NonZeroUsize::new_unchecked(MIN_PACKET_LENGTH))
+            );
+            assert_eq!(
+                parse_packet_length("65000"),
+                Ok(NonZeroUsize::new_unchecked(MAX_PACKET_LENGTH))
+            );
+        }
     }
 
     #[test]
