@@ -32,7 +32,7 @@ mod parsers;
 pub const MIN_PACKET_LENGTH: usize = 1;
 pub const MAX_PACKET_LENGTH: usize = 65000;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Eq, PartialEq, StructOpt)]
 #[structopt(
     author = "Temirkhan Myrzamadi <gymmasssorla@gmail.com>",
     about = "An UDP-based server stress-testing tool, written in Rust.",

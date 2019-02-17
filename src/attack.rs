@@ -111,22 +111,24 @@ impl<'a> Attacker<'a> {
 mod tests {
     use super::*;
 
+    use std::net::SocketAddr;
+
     use structopt::StructOpt;
+
+    fn default_config(receiver: SocketAddr) -> ArgsConfig {
+        // The first command-line argument doesn't have any meaning for CLAP
+        ArgsConfig::from_iter_safe(vec!["anevicon", "--receiver", &receiver.to_string()])
+            .expect("The command-line arguments are incorrectly specified")
+    }
+
+    fn setup_attacker(args_config: &ArgsConfig) -> Attacker {
+        Attacker::from_args_config(args_config)
+            .expect("Cannot setup the testing attacker with this configuration")
+    }
 
     fn setup_server() -> UdpSocket {
         UdpSocket::bind("0.0.0.0:0")
             .expect("Cannot setup the testing server with the address 0.0.0.0:0")
-    }
-
-    fn default_config(server: &UdpSocket) -> ArgsConfig {
-        let server_addr = server
-            .local_addr()
-            .expect("Cannot get the testing server local address")
-            .to_string();
-
-        // The first command-line argument doesn't have any meaning for CLAP
-        ArgsConfig::from_iter_safe(vec!["anevicon", "--receiver", &server_addr])
-            .expect("The command-line arguments are incorrectly specified")
     }
 
     #[test]
@@ -140,21 +142,56 @@ mod tests {
     }
 
     #[test]
+    fn correctly_constructs_attacker() {
+        // Specify any valid-formatted addresses, this isn't essential
+        let mut config = default_config("127.0.0.1:53364".parse().unwrap());
+        config.sender = "127.0.0.1:56978".parse().unwrap();
+
+        // Setup our testing attacker with the previous receiver address
+        let attacker = setup_attacker(&config);
+
+        assert_eq!(attacker.args_config, &config);
+        assert_eq!(
+            attacker
+                .socket
+                .write_timeout()
+                .expect("Cannot get the write timeout from the attacker"),
+            config.send_timeout
+        );
+        assert_eq!(
+            attacker
+                .socket
+                .local_addr()
+                .expect("Cannot get the attacking socket local address"),
+            config.sender
+        );
+        assert_eq!(
+            NonZeroUsize::new(attacker.buffer.len())
+                .expect("The buffer might not be generated (its length equals to zero)"),
+            config.length
+        );
+    }
+
+    #[test]
     fn sends_all_packets() {
         // Assign a very low required packets count to prevent our
-        // lovely Travis CI and your computer for a shameful breaking :)))
+        // lovely Travis CI and your computer for a shameful breaking
         const REQUIRED_PACKETS: NonZeroUsize = unsafe { NonZeroUsize::new_unchecked(25) };
 
         // Setup the testing server and modify the default config
         let server = setup_server();
-        let mut config = default_config(&server);
+        let mut config = default_config(
+            server
+                .local_addr()
+                .expect("Cannot get the testing server local address"),
+        );
         config.packets = REQUIRED_PACKETS;
 
+        // Check that our attacker has successfully sent all the packets
         assert_eq!(
-            Attacker::from_args_config(&config)
-                .expect("Cannot setup the testing attacker")
+            setup_attacker(&config)
                 .attack()
-                .expect("The testing attack has returned an error")
+                .expect("An error occurred during the attack")
                 .packets_sent(),
             REQUIRED_PACKETS.get()
         );
