@@ -152,23 +152,6 @@ pub struct ArgsConfig {
     pub debug: bool,
 }
 
-impl ArgsConfig {
-    pub fn default(receiver: SocketAddr, send_timeout: Option<Duration>) -> ArgsConfig {
-        ArgsConfig {
-            receiver,
-            sender: "0.0.0.0:0".parse().unwrap(),
-            duration: parse_duration("64years 64hours 64secs").unwrap(),
-            length: unsafe { NonZeroUsize::new_unchecked(MAX_PACKET_LENGTH) },
-            wait: parse_duration("5secs").unwrap(),
-            send_periodicity: parse_duration("0s").unwrap(),
-            display_periodicity: unsafe { NonZeroUsize::new_unchecked(300) },
-            packets: unsafe { NonZeroUsize::new_unchecked(std::usize::MAX) },
-            send_timeout,
-            debug: false,
-        }
-    }
-}
-
 impl Display for ArgsConfig {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         write!(

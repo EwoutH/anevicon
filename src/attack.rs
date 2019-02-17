@@ -111,18 +111,22 @@ impl<'a> Attacker<'a> {
 mod tests {
     use super::*;
 
+    use structopt::StructOpt;
+
     fn setup_server() -> UdpSocket {
         UdpSocket::bind("0.0.0.0:0")
             .expect("Cannot setup the testing server with the address 0.0.0.0:0")
     }
 
     fn default_config(server: &UdpSocket) -> ArgsConfig {
-        ArgsConfig::default(
-            server
-                .local_addr()
-                .expect("Cannot get the testing server local address"),
-            None,
-        )
+        let server_addr = server
+            .local_addr()
+            .expect("Cannot get the testing server local address")
+            .to_string();
+
+        // The first command-line argument doesn't have any meaning for CLAP
+        ArgsConfig::from_iter_safe(vec!["anevicon", "--receiver", &server_addr])
+            .expect("The command-line arguments are incorrectly specified")
     }
 
     #[test]
