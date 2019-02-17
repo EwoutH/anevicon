@@ -73,20 +73,7 @@ impl<'a> Attacker<'a> {
             for _ in 0..self.args_config.display_periodicity.get() {
                 summary.update(self.socket.send(&self.buffer)?, 1);
 
-                if summary.time_passed() >= self.args_config.duration {
-                    info!(
-                        "The program is stopping the packet sending because \
-                         the allotted time has passed. The total result is: {}.",
-                        summary
-                    );
-                    return Ok(summary);
-                }
-                if summary.packets_sent() == self.args_config.packets.get() {
-                    info!(
-                        "The program is stopping the packet sending because \
-                         all the required packets were sent. The total result is: {}.",
-                        summary
-                    );
+                if self.check_end_cond(&summary) {
                     return Ok(summary);
                 }
 
@@ -95,6 +82,27 @@ impl<'a> Attacker<'a> {
 
             info!("The attack is running with {}.", summary);
         }
+    }
+
+    fn check_end_cond(&self, summary: &AttackSummary) -> bool {
+        if summary.time_passed() >= self.args_config.duration {
+            info!(
+                "The program is stopping the packet sending because \
+                 the allotted time has passed. The total result is: {}.",
+                summary
+            );
+            return true;
+        }
+        if summary.packets_sent() == self.args_config.packets.get() {
+            info!(
+                "The program is stopping the packet sending because \
+                 all the required packets were sent. The total result is: {}.",
+                summary
+            );
+            return true;
+        }
+
+        false
     }
 }
 
