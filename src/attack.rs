@@ -40,6 +40,7 @@ impl<'a> Attacker<'a> {
         // Complete any necessary stuff with the specified socket
         let socket = UdpSocket::bind(args_config.sender)?;
         socket.connect(args_config.receiver)?;
+        socket.set_write_timeout(args_config.send_timeout)?;
 
         Ok(Attacker {
             socket,
@@ -116,10 +117,11 @@ mod tests {
     }
 
     fn default_config(server: &UdpSocket) -> ArgsConfig {
-        ArgsConfig::default_with_receiver(
+        ArgsConfig::default(
             server
                 .local_addr()
                 .expect("Cannot get the testing server local address"),
+            None,
         )
     }
 
