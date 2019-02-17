@@ -28,9 +28,9 @@ pub fn parse_packet_length(length: &str) -> Result<NonZeroUsize, PacketLengthErr
         .parse()
         .map_err(|error| PacketLengthError::InvalidFormat(error))?;
 
-    if length < MIN_PACKET_LENGTH {
+    if length < MIN_PACKET_LENGTH.get() {
         return Err(PacketLengthError::Underflow);
-    } else if length > MAX_PACKET_LENGTH {
+    } else if length > MAX_PACKET_LENGTH.get() {
         return Err(PacketLengthError::Overflow);
     }
 
@@ -101,17 +101,11 @@ mod tests {
                 parse_packet_length("+75"),
                 Ok(NonZeroUsize::new_unchecked(75))
             );
-
-            // Check that the min and max values are still valid
-            assert_eq!(
-                parse_packet_length("1"),
-                Ok(NonZeroUsize::new_unchecked(MIN_PACKET_LENGTH))
-            );
-            assert_eq!(
-                parse_packet_length("65000"),
-                Ok(NonZeroUsize::new_unchecked(MAX_PACKET_LENGTH))
-            );
         }
+
+        // Check that the min and max values are still valid
+        assert_eq!(parse_packet_length("1"), Ok(MIN_PACKET_LENGTH));
+        assert_eq!(parse_packet_length("65000"), Ok(MAX_PACKET_LENGTH));
     }
 
     #[test]

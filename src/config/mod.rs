@@ -23,14 +23,17 @@ use std::num::NonZeroUsize;
 use std::time::Duration;
 
 use humantime::{format_duration, parse_duration};
+use lazy_static::lazy_static;
 use structopt::StructOpt;
 
 use parsers::{parse_non_zero_usize, parse_packet_length};
 
 mod parsers;
 
-pub const MIN_PACKET_LENGTH: usize = 1;
-pub const MAX_PACKET_LENGTH: usize = 65000;
+lazy_static! {
+    pub static ref MIN_PACKET_LENGTH: NonZeroUsize = unsafe { NonZeroUsize::new_unchecked(1) };
+    pub static ref MAX_PACKET_LENGTH: NonZeroUsize = unsafe { NonZeroUsize::new_unchecked(65000) };
+}
 
 #[derive(Debug, Eq, PartialEq, StructOpt)]
 #[structopt(
