@@ -84,7 +84,7 @@ impl<'a> Attacker<'a> {
                 thread::sleep(self.args_config.send_periodicity);
             }
 
-            info!("{}.", summary);
+            info!("The attack is running with {}.", summary);
         }
     }
 }

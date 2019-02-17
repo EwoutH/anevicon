@@ -70,7 +70,7 @@ impl Display for AttackSummary {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         write!(
             fmt,
-            "Packets sent: {packets}, \
+            "packets sent: {packets}, \
              megabytes sent: {megabytes}, \
              the average speed: {speed} MB/s, \
              time passed: {time_passed}",

@@ -142,7 +142,7 @@ impl Display for ArgsConfig {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         write!(
             fmt,
-            "Receiver: {receiver}, \
+            "receiver: {receiver}, \
              sender: {sender}, \
              duration: {duration}, \
              length: {length}, \
