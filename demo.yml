@@ -49,7 +49,7 @@ config:
   # To hide the title use the value null
   # Don't forget to add a backgroundColor style with a null as type
   frameBox:
-    type: window
+    type: floating
     title: Anevicon
     style:
       border: 0px black solid
@@ -108,44 +108,40 @@ config:
     brightMagenta: "#ae89fe"
     brightCyan: "#b1c6ca"
     brightWhite: "#f9f9f4"
-  
+
 # Records, feel free to edit them
 records:
-  - delay: 350
-    content: "\e]0;gymmasssorla@gymmasssorla-desktop:/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]7;file://gymmasssorla-desktop/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]0;gymmasssorla@gymmasssorla-desktop: /media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e[01;32mgymmasssorla@gymmasssorla-desktop\e[00m:\e[01;34m/media/gymmasssorla/772CF8924BEBB279/Documents/\r/anevicon\e[00m$ "
-  - delay: 872
-    content: "anevicon --receiver 46.51.179.90:80 --duration 15s --wait 3s --display\ry-periodicity 200"
-  - delay: 267
-    content: "\r\n[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:38:53 +0600\e[0m]: The program is starting to attack with Receiver: 46.51.179.90:80, sender: 0.0.0.0:0, duration: 15s, length: 65000, wait: 3s, send-periodicity: 0s, display-periodicity: 200, packets: 18446744073709551615, debug: false\r\n"
+  - delay: 456
+    content: "\e]0;gymmasssorla@gymmasssorla-desktop:/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]7;file://gymmasssorla-desktop/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]0;gymmasssorla@gymmasssorla-desktop: /media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e[01;32mgymmasssorla@gymmasssorla-desktop\e[00m:\e[01;34m/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\e[00m$ "
+  - delay: 1304
+    content: "anevicon --\r-receiver 46.51.179.90:80 --duration 12s --wait 3s --display-periodicity 200"
+  - delay: 30
+    content: "\r\n[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:06 +0600\e[0m]: The program is starting to attack with receiver: 46.51.179.90:80, sender: 0.0.0.0:0, duration: 12s, length: 65000, wait: 3s, send-periodicity: 0s, display-periodicity: 200, packets: 18446744073709551615, send-timeout: infinity, debug: false. Press <CTRL+C> to exit.\r\n"
   - delay: 4073
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:38:57 +0600\e[0m]: Packets sent: 200, megabytes sent: 12, the average speed: 12 MB/s, time passed: 1s 72ms 897us 543ns\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:10 +0600\e[0m]: The attack is running with packets sent: 200, megabytes sent: 12, the average speed: 12 MB/s, time passed: 1s 72ms 619us 524ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:11 +0600\e[0m]: The attack is running with packets sent: 400, megabytes sent: 24, the average speed: 12 MB/s, time passed: 2s 156ms 570us 407ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:13 +0600\e[0m]: The attack is running with packets sent: 600, megabytes sent: 37, the average speed: 12 MB/s, time passed: 3s 240ms 386us 91ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:14 +0600\e[0m]: The attack is running with packets sent: 800, megabytes sent: 49, the average speed: 12 MB/s, time passed: 4s 323ms 967us 672ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:15 +0600\e[0m]: The attack is running with packets sent: 1000, megabytes sent: 61, the average speed: 12 MB/s, time passed: 5s 407ms 782us 892ns.\r\n"
   - delay: 1083
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:38:58 +0600\e[0m]: Packets sent: 400, megabytes sent: 24, the average speed: 12 MB/s, time passed: 2s 156ms 420us 311ns\r\n"
-  - delay: 1085
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:38:59 +0600\e[0m]: Packets sent: 600, megabytes sent: 37, the average speed: 12 MB/s, time passed: 3s 240ms 602us 675ns\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:16 +0600\e[0m]: The attack is running with packets sent: 1200, megabytes sent: 74, the average speed: 12 MB/s, time passed: 6s 491ms 521us 848ns.\r\n"
   - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:00 +0600\e[0m]: Packets sent: 800, megabytes sent: 49, the average speed: 12 MB/s, time passed: 4s 324ms 379us 984ns\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:17 +0600\e[0m]: The attack is running with packets sent: 1400, megabytes sent: 86, the average speed: 12 MB/s, time passed: 7s 575ms 484us 73ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:18 +0600\e[0m]: The attack is running with packets sent: 1600, megabytes sent: 99, the average speed: 12 MB/s, time passed: 8s 659ms 107us 877ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:19 +0600\e[0m]: The attack is running with packets sent: 1800, megabytes sent: 111, the average speed: 12 MB/s, time passed: 9s 742ms 986us 464ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:20 +0600\e[0m]: The attack is running with packets sent: 2000, megabytes sent: 123, the average speed: 12 MB/s, time passed: 10s 826ms 753us 402ns.\r\n"
   - delay: 1083
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:02 +0600\e[0m]: Packets sent: 1000, megabytes sent: 61, the average speed: 12 MB/s, time passed: 5s 408ms 239us 48ns\r\n"
-  - delay: 1083
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:03 +0600\e[0m]: Packets sent: 1200, megabytes sent: 74, the average speed: 12 MB/s, time passed: 6s 492ms 20us 637ns\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:04 +0600\e[0m]: Packets sent: 1400, megabytes sent: 86, the average speed: 12 MB/s, time passed: 7s 575ms 803us 741ns\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:05 +0600\e[0m]: Packets sent: 1600, megabytes sent: 99, the average speed: 12 MB/s, time passed: 8s 659ms 513us 846ns\r\n"
-  - delay: 1083
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:06 +0600\e[0m]: Packets sent: 1800, megabytes sent: 111, the average speed: 12 MB/s, time passed: 9s 743ms 301us 600ns\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:07 +0600\e[0m]: Packets sent: 2000, megabytes sent: 123, the average speed: 12 MB/s, time passed: 10s 827ms 171us 806ns\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:08 +0600\e[0m]: Packets sent: 2200, megabytes sent: 136, the average speed: 12 MB/s, time passed: 11s 910ms 915us 423ns\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:09 +0600\e[0m]: Packets sent: 2400, megabytes sent: 148, the average speed: 12 MB/s, time passed: 12s 994ms 673us 316ns\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:10 +0600\e[0m]: Packets sent: 2600, megabytes sent: 161, the average speed: 11 MB/s, time passed: 14s 78ms 502us 676ns\r\n"
-  - delay: 932
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 00:39:11 +0600\e[0m]: The program is stopping the packet sending because the allotted time has passed. The total result is: Packets sent: 2772, megabytes sent: 171, the average speed: 11 MB/s, time passed: 15s 10ms 538us 119ns\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:21 +0600\e[0m]: The attack is running with packets sent: 2200, megabytes sent: 136, the average speed: 12 MB/s, time passed: 11s 910ms 402us 577ns.\r\n"
+  - delay: 98
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:21 +0600\e[0m]: The program is stopping the packet sending because the allotted time has passed. The total result is: packets sent: 2218, megabytes sent: 137, the average speed: 11 MB/s, time passed: 12s 8ms 109us 86ns.\r\n"
   - delay: 6
-    content: "\e]0;gymmasssorla@gymmasssorla-desktop:/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]7;file://gymmasssorla-desktop/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]0;gymmasssorla@gymmasssorla-desktop: /media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e[01;32mgymmasssorla@gymmasssorla-desktop\e[00m:\e[01;34m/media/gymmasssorla/772CF8924BEBB279/Documents/\r/anevicon\e[00m$ "
-  - delay: 424
+    content: "\e]0;gymmasssorla@gymmasssorla-desktop:/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]7;file://gymmasssorla-desktop/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]0;gymmasssorla@gymmasssorla-desktop: /media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e[01;32mgymmasssorla@gymmasssorla-desktop\e[00m:\e[01;34m/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\e[00m$ "
+  - delay: 464
     content: "logout\r\n"
