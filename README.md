@@ -23,7 +23,9 @@ group of hackers.
 
 ## Installation
 ```bash
-$ cargo install anevicon
+$ git clone https://github.com/Gymmasssorla/anevicon.git
+$ cd anevicon
+$ cargo run --release -- --help
 ```
 
 ## Usage
