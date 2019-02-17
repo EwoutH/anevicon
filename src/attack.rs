@@ -63,7 +63,7 @@ impl<'a> Attacker<'a> {
 
     pub fn attack(&self) -> io::Result<AttackSummary> {
         info!(
-            "The program is starting to attack with {}. Press <CTRL+C> to exit.",
+            "The program is starting to attack with {}.",
             self.args_config
         );
 

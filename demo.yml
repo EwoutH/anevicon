@@ -116,7 +116,7 @@ records:
   - delay: 1304
     content: "anevicon --\r-receiver 46.51.179.90:80 --duration 12s --wait 3s --display-periodicity 200"
   - delay: 30
-    content: "\r\n[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:06 +0600\e[0m]: The program is starting to attack with receiver: 46.51.179.90:80, sender: 0.0.0.0:0, duration: 12s, length: 65000, wait: 3s, send-periodicity: 0s, display-periodicity: 200, packets: 18446744073709551615, send-timeout: infinity, debug: false. Press <CTRL+C> to exit.\r\n"
+    content: "\r\n[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:06 +0600\e[0m]: The program is starting to attack with receiver: 46.51.179.90:80, sender: 0.0.0.0:0, duration: 12s, length: 65000, wait: 3s, send-periodicity: 0s, display-periodicity: 200, packets: 18446744073709551615, send-timeout: infinity, debug: false.\r\n"
   - delay: 4073
     content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:10 +0600\e[0m]: The attack is running with packets sent: 200, megabytes sent: 12, the average speed: 12 MB/s, time passed: 1s 72ms 619us 524ns.\r\n"
   - delay: 1084
