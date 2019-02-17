@@ -40,8 +40,13 @@ impl<'a> Attacker<'a> {
         let socket = UdpSocket::bind(args_config.sender)?;
         socket.connect(args_config.receiver)?;
 
-        // Generate a random set of bytes into the sending buffer
-        let mut buffer = vec![0; args_config.length];
+        // Create a sending buffer without an unnecessary initialization
+        // because we'll fill this buffer with random values next.
+        let mut buffer = Vec::with_capacity(args_config.length);
+        unsafe {
+            buffer.set_len(args_config.length);
+        }
+
         thread_rng().fill_bytes(buffer.as_mut_slice());
 
         Ok(Attacker {
