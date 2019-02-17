@@ -64,6 +64,10 @@ OPTIONS:
             A periodicity of sending packets. The default value equals to zero
             seconds, that is, all packets will be sent momentarily. [default:
             0secs]
+        --send-timeout <TIME-SPAN>
+            If sending calls will continue longer than this timeout, the program
+            will exit with an error. By default, all the sending calls will
+            continue indefinitely.
     -s, --sender <ADDRESS>
             A sender of generated traffic, specified as an IP-address and a port
             number, separated by the colon character. [default: 0.0.0.0:0]
