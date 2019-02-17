@@ -145,46 +145,15 @@ impl ArgsConfig {
     pub fn default_with_receiver(receiver: SocketAddr) -> ArgsConfig {
         ArgsConfig {
             receiver,
-            sender: ArgsConfig::default_sender(),
-            duration: ArgsConfig::default_duration(),
-            length: ArgsConfig::default_length(),
-            wait: ArgsConfig::default_wait(),
-            send_periodicity: ArgsConfig::default_send_periodicity(),
-            display_periodicity: ArgsConfig::default_display_periodicity(),
-            packets: ArgsConfig::default_packets(),
-            debug: ArgsConfig::default_debug(),
+            sender: "0.0.0.0:0".parse().unwrap(),
+            duration: parse_duration("64years 64hours 64secs").unwrap(),
+            length: unsafe { NonZeroUsize::new_unchecked(MAX_PACKET_LENGTH) },
+            wait: parse_duration("5s").unwrap(),
+            send_periodicity: parse_duration("0s").unwrap(),
+            display_periodicity: unsafe { NonZeroUsize::new_unchecked(300) },
+            packets: unsafe { NonZeroUsize::new_unchecked(std::usize::MAX) },
+            debug: false,
         }
-    }
-    pub fn default_sender() -> SocketAddr {
-        "0.0.0.0:0".parse().unwrap()
-    }
-
-    pub fn default_duration() -> Duration {
-        parse_duration("64years 64hours 64secs").unwrap()
-    }
-
-    pub fn default_length() -> NonZeroUsize {
-        unsafe { NonZeroUsize::new_unchecked(MAX_PACKET_LENGTH) }
-    }
-
-    pub fn default_wait() -> Duration {
-        parse_duration("5s").unwrap()
-    }
-
-    pub fn default_send_periodicity() -> Duration {
-        parse_duration("0s").unwrap()
-    }
-
-    pub fn default_display_periodicity() -> NonZeroUsize {
-        unsafe { NonZeroUsize::new_unchecked(300) }
-    }
-
-    pub fn default_packets() -> NonZeroUsize {
-        unsafe { NonZeroUsize::new_unchecked(std::usize::MAX) }
-    }
-
-    pub fn default_debug() -> bool {
-        false
     }
 }
 
