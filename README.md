@@ -85,6 +85,3 @@ For more information see <https://github.com/Gymmasssorla/anevicon>.
  - Anevicon was developed as a means of testing the stress resistance of servers, and not for hacking, that is, the author of the project **IS NOT RESPONSIBLE** for any damage caused by your use of my program. See [the license notice](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE#L600).
  
  - Despite the fact that Anevicon is heavily tested both automatically and manually, does not mean that the author is responsible for any bug in his work. The program comes with **ABSOLUTELY NO WARRANTY**, see [the license disclaimer](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE#L589).
-
-## Disclaimer
-> Anevivon is still under heavy development process and it is quite unstable now, not all options are implemented, and not all things are tested as it should. Feel free to contribute, add more features, debate with others, and suggest your genius ideas!
