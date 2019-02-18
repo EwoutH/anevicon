@@ -7,7 +7,7 @@ authors = ["Temirkhan Myrzamadi <gymmasssorla@gmail.com>"]
 keywords = ["anevicon", "ddos-attacks", "load-generator", "stress-testing", "pentest-tool"]
 categories = ["command-line-utilities", "simulation", "network-programming"]
 readme = "README.md"
-license = "gpl-3.0-only"
+license = "GPL-3.0-only"
 edition = "2018"
 
 [badges]
