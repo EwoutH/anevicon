@@ -17,23 +17,14 @@
  * For more information see <https://github.com/Gymmasssorla/anevicon>.
  */
 
+use std::error::Error;
 use std::fmt::{self, Display, Formatter};
 use std::net::SocketAddr;
-use std::num::NonZeroUsize;
+use std::num::{NonZeroUsize, ParseIntError};
 use std::time::Duration;
 
 use humantime::{format_duration, parse_duration};
-use lazy_static::lazy_static;
 use structopt::StructOpt;
-
-use parsers::{parse_non_zero_usize, parse_packet_length};
-
-mod parsers;
-
-lazy_static! {
-    pub static ref MIN_PACKET_LENGTH: NonZeroUsize = unsafe { NonZeroUsize::new_unchecked(1) };
-    pub static ref MAX_PACKET_LENGTH: NonZeroUsize = unsafe { NonZeroUsize::new_unchecked(65000) };
-}
 
 #[derive(Debug, Eq, PartialEq, StructOpt)]
 #[structopt(
@@ -78,16 +69,16 @@ pub struct ArgsConfig {
     )]
     pub duration: Duration,
 
-    /// A size of each UDP-packet in the range of [1; 65000],
-    /// specified in bytes. Note that your system or a victim server
-    /// might not be able to handle the default value.
+    /// A size of each UDP-packet, specified in bytes. Note that
+    /// your system or a victim server might not be able to handle
+    /// the default value.
     #[structopt(
         short = "l",
         long = "length",
         takes_value = true,
         value_name = "BYTES",
         default_value = "65000",
-        parse(try_from_str = "parse_packet_length")
+        parse(try_from_str = "parse_non_zero_usize")
     )]
     pub length: NonZeroUsize,
 
@@ -185,5 +176,79 @@ impl Display for ArgsConfig {
             send_timeout = send_timeout,
             debug = self.debug,
         )
+    }
+}
+
+pub fn parse_non_zero_usize(number: &str) -> Result<NonZeroUsize, NonZeroUsizeError> {
+    let number: usize = number
+        .parse()
+        .map_err(|error| NonZeroUsizeError::InvalidFormat(error))?;
+
+    NonZeroUsize::new(number).ok_or(NonZeroUsizeError::ZeroValue)
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum NonZeroUsizeError {
+    InvalidFormat(ParseIntError),
+    ZeroValue,
+}
+
+impl Display for NonZeroUsizeError {
+    fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
+        match self {
+            NonZeroUsizeError::InvalidFormat(error) => write!(fmt, "{}", error),
+            NonZeroUsizeError::ZeroValue => write!(fmt, "The value equals to zero"),
+        }
+    }
+}
+
+impl Error for NonZeroUsizeError {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parses_valid_non_zero_usize() {
+        unsafe {
+            // Check that ordinary values are parsed correctly
+            assert_eq!(
+                parse_non_zero_usize("1"),
+                Ok(NonZeroUsize::new_unchecked(1))
+            );
+            assert_eq!(
+                parse_non_zero_usize("3"),
+                Ok(NonZeroUsize::new_unchecked(3))
+            );
+            assert_eq!(
+                parse_non_zero_usize("26655"),
+                Ok(NonZeroUsize::new_unchecked(26655))
+            );
+            assert_eq!(
+                parse_non_zero_usize("+75"),
+                Ok(NonZeroUsize::new_unchecked(75))
+            );
+        }
+    }
+
+    #[test]
+    fn parses_invalid_non_zero_usize() {
+        let panic_if_invalid = |string| {
+            if let Ok(_) = parse_non_zero_usize(string) {
+                panic!("Parses invalid formatted usize correctly");
+            }
+        };
+
+        // Invalid numbers must produce the invalid format error
+        panic_if_invalid("   ");
+
+        panic_if_invalid("abc5653odr!");
+        panic_if_invalid("6485&02hde");
+
+        panic_if_invalid("-565642");
+        panic_if_invalid(&"2178".repeat(50));
+
+        // Check that the zero value is not allowed
+        assert_eq!(parse_non_zero_usize("0"), Err(NonZeroUsizeError::ZeroValue));
     }
 }
