@@ -10,6 +10,9 @@ readme = "README.md"
 license = "gpl-3.0-only"
 edition = "2018"
 
+[badges]
+travis-ci = { repository = "Gymmasssorla/anevicon", branch = "master" }
+
 [dependencies]
 fern = { version = "0.5.7", features = ["colored"] }
 log = "0.4.6"
