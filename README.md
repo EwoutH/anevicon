@@ -50,9 +50,9 @@ OPTIONS:
             attack will be performed until you explicitly stop the process.
             [default: 64years 64hours 64secs]
     -l, --length <BYTES>
-            A size of each UDP-packet in the range of [1; 65000], specified in
-            bytes. Note that your system or a victim server might not be able to
-            handle the default value. [default: 65000]
+            A size of each UDP-packet, specified in bytes. Note that your system
+            or a victim server might not be able to handle the default value.
+            [default: 65000]
     -p, --packets <COUNT>
             A count of packets for sending. The default value equals to the
             largest number available for the inner data type. [default:
