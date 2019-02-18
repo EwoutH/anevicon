@@ -79,7 +79,7 @@ For more information see <https://github.com/Gymmasssorla/anevicon>.
 ```
 
 ## Contributing
-Since Anevicon is an absolutely free (in sense of freedom) software, anyone can contribute to this project right now from anywhere on this planet. But for organization reasons, you ought to read a couple of documents before you start your contribution:
+Since Anevicon is an absolutely free (in sense of freedom) software, anyone can contribute to this project from anywhere on this planet. But for organization reasons, you ought to read a couple of documents before you start your contribution:
  - [Code Of Conduct](https://github.com/Gymmasssorla/anevicon/blob/master/CODE_OF_CONDUCT.md)
  - [The GPLv License](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE)
 
