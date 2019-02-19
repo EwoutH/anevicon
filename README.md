@@ -78,6 +78,48 @@ OPTIONS:
 For more information see <https://github.com/Gymmasssorla/anevicon>.
 ```
 
+## Examples
+
+### Minimal command
+All you need is to provide the testing server address, which consists of an IP address and a port number, separated by the colon character. By default, all sending sockets will have your local address:
+
+```bash
+# Test the 80 port of the example.com site using your local address
+$ anevicon --receiver 93.184.216.34:80
+```
+
+### IP spoofing
+Using the IP spoofing technique, hackers can protect their bandwidth from server response messages and hide their real IP address. You can imitate it via the `--sender` command-line option, as described below:
+
+```bash
+# Test the 80 port of the example.com site using its own IP address
+$ anevicon --receiver 93.184.216.34:80 --sender 93.184.216.34:80
+```
+
+### End conditions
+Note that the command above might not work on your system due to the security reasons. To make your test deterministic, there are two end conditions called `--duration` and `--packets` (a test duration and a packets count, respectively):
+
+```bash
+# Test the 80 port of the example.com site with the two limit options
+$ anevicon --receiver 93.184.216.34:80 --duration 3min --packets 7000
+```
+
+### Packet size
+Note that the test below will end when, and only when one of two specified end conditions become true. And what is more, you can specify a global packet length in bytes:
+
+```bash
+# Test the 80 port of example.com with the packet length of 4092 bytes
+$ anevicon --receiver 93.184.216.34:80 --length 4092
+```
+
+### Specific options
+Wait 7 seconds, and then start to test, displaying summaries after every 400 packets, wait 270 macroseconds between sending two packets, and exit with an error if time to send a packet is longer than 200 milliseconds:
+
+```bash
+# Test the 80 port of the example.com site using the specific options
+$ anevicon --receiver 93.184.216.34:80 --wait 7s --display-periodicity 400 --send-periodicity 270us --send-timeout 200ms
+```
+
 ## Contributing
 Since Anevicon is a free (in sense of freedom) kind of software, you are always welcome to contribute! Please look through our [code of conduct](https://github.com/Gymmasssorla/anevicon/blob/master/CODE_OF_CONDUCT.md) and the liberal [GPLv3 license](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE), under which the product is distributed. Now let's discuss how to make your contribution productive:
 
