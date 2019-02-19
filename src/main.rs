@@ -20,30 +20,30 @@
 use log::error;
 use structopt::StructOpt;
 
-use attack::Attacker;
 use config::ArgsConfig;
 use logging::setup_logging;
+use tester::Tester;
 
-mod attack;
 mod config;
 mod logging;
 mod summary;
+mod tester;
 
 fn main() {
     let config = ArgsConfig::from_args();
 
     setup_logging(config.debug);
 
-    let attacker = match Attacker::from_args_config(&config) {
+    let tester = match Tester::from_args_config(&config) {
         Err(error) => {
-            error!("Cannot setup the attacker: {}!", error);
+            error!("Cannot setup the tester: {}!", error);
             std::process::exit(1);
         }
-        Ok(attacker) => attacker,
+        Ok(tester) => tester,
     };
 
-    if let Err(error) = attacker.attack() {
-        error!("An error occurred during the attack: {}!", error);
+    if let Err(error) = tester.execute() {
+        error!("An error occurred during the test: {}!", error);
         std::process::exit(1);
     }
 }

@@ -23,28 +23,28 @@ use std::num::NonZeroUsize;
 use std::thread;
 
 use super::config::ArgsConfig;
-use super::summary::AttackSummary;
+use super::summary::TestSummary;
 
 use log::info;
 use rand::{thread_rng, RngCore};
 
 #[derive(Debug)]
-pub struct Attacker<'a> {
+pub struct Tester<'a> {
     socket: UdpSocket,
     buffer: Vec<u8>,
     args_config: &'a ArgsConfig,
 }
 
-impl<'a> Attacker<'a> {
-    pub fn from_args_config(args_config: &'a ArgsConfig) -> io::Result<Attacker<'a>> {
+impl<'a> Tester<'a> {
+    pub fn from_args_config(args_config: &'a ArgsConfig) -> io::Result<Tester<'a>> {
         // Complete any necessary stuff with the specified socket
         let socket = UdpSocket::bind(args_config.sender)?;
         socket.connect(args_config.receiver)?;
         socket.set_write_timeout(args_config.send_timeout)?;
 
-        Ok(Attacker {
+        Ok(Tester {
             socket,
-            buffer: Attacker::random_buffer(args_config.length),
+            buffer: Tester::random_buffer(args_config.length),
             args_config,
         })
     }
@@ -61,14 +61,11 @@ impl<'a> Attacker<'a> {
         buffer
     }
 
-    pub fn attack(&self) -> io::Result<AttackSummary> {
-        info!(
-            "The program is starting to attack with {}.",
-            self.args_config
-        );
+    pub fn execute(&self) -> io::Result<TestSummary> {
+        info!("The program is starting to test with {}.", self.args_config);
 
         thread::sleep(self.args_config.wait);
-        let mut summary = AttackSummary::new();
+        let mut summary = TestSummary::new();
 
         loop {
             for _ in 0..self.args_config.display_periodicity.get() {
@@ -81,11 +78,11 @@ impl<'a> Attacker<'a> {
                 thread::sleep(self.args_config.send_periodicity);
             }
 
-            info!("The attack is running with {}.", summary);
+            info!("The test is running with {}.", summary);
         }
     }
 
-    fn check_end_cond(&self, summary: &AttackSummary) -> bool {
+    fn check_end_cond(&self, summary: &TestSummary) -> bool {
         if summary.time_passed() >= self.args_config.duration {
             info!(
                 "The program is stopping the packet sending because \
@@ -121,9 +118,9 @@ mod tests {
             .expect("The command-line arguments are incorrectly specified")
     }
 
-    fn setup_attacker(args_config: &ArgsConfig) -> Attacker {
-        Attacker::from_args_config(args_config)
-            .expect("Cannot setup the testing attacker with this configuration")
+    fn setup_tester(args_config: &ArgsConfig) -> Tester {
+        Tester::from_args_config(args_config)
+            .expect("Cannot setup the tester with this configuration")
     }
 
     fn setup_server() -> UdpSocket {
@@ -134,7 +131,7 @@ mod tests {
     #[test]
     fn generates_random_buffer() {
         let length = unsafe { NonZeroUsize::new_unchecked(35684) };
-        let buffer = Attacker::random_buffer(length);
+        let buffer = Tester::random_buffer(length);
 
         // Check that we've got the correctly length and capacity
         assert_eq!(buffer.len(), length.get());
@@ -142,31 +139,31 @@ mod tests {
     }
 
     #[test]
-    fn correctly_constructs_attacker() {
+    fn correctly_constructs_tester() {
         // Specify any valid-formatted addresses, this isn't essential
         let mut config = default_config("127.0.0.1:53364".parse().unwrap());
         config.sender = "127.0.0.1:56978".parse().unwrap();
 
-        // Setup our testing attacker with the previous receiver address
-        let attacker = setup_attacker(&config);
+        // Setup our tester with the previous receiver address
+        let tester = setup_tester(&config);
 
-        assert_eq!(attacker.args_config, &config);
+        assert_eq!(tester.args_config, &config);
         assert_eq!(
-            attacker
+            tester
                 .socket
                 .write_timeout()
-                .expect("Cannot get the write timeout from the attacker"),
+                .expect("Cannot get the write timeout from the tester"),
             config.send_timeout
         );
         assert_eq!(
-            attacker
+            tester
                 .socket
                 .local_addr()
-                .expect("Cannot get the attacking socket local address"),
+                .expect("Cannot get the testing socket local address"),
             config.sender
         );
         assert_eq!(
-            NonZeroUsize::new(attacker.buffer.len())
+            NonZeroUsize::new(tester.buffer.len())
                 .expect("The buffer might not be generated (its length equals to zero)"),
             config.length
         );
@@ -187,11 +184,11 @@ mod tests {
         );
         config.packets = REQUIRED_PACKETS;
 
-        // Check that our attacker has successfully sent all the packets
+        // Check that our tester has successfully sent all the packets
         assert_eq!(
-            setup_attacker(&config)
-                .attack()
-                .expect("An error occurred during the attack")
+            setup_tester(&config)
+                .execute()
+                .expect("An error occurred during the test")
                 .packets_sent(),
             REQUIRED_PACKETS.get()
         );

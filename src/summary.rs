@@ -23,15 +23,15 @@ use std::time::{Duration, Instant};
 use humantime::format_duration;
 
 #[derive(Debug, Clone)]
-pub struct AttackSummary {
+pub struct TestSummary {
     bytes_sent: usize,
     packets_sent: usize,
     initial_time: Instant,
 }
 
-impl AttackSummary {
-    pub fn new() -> AttackSummary {
-        AttackSummary {
+impl TestSummary {
+    pub fn new() -> TestSummary {
+        TestSummary {
             bytes_sent: 0,
             packets_sent: 0,
             initial_time: Instant::now(),
@@ -66,7 +66,7 @@ impl AttackSummary {
     }
 }
 
-impl Display for AttackSummary {
+impl Display for TestSummary {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         write!(
             fmt,
@@ -89,7 +89,7 @@ mod tests {
 
     #[test]
     fn is_nondecreasing_clock() {
-        let summary = AttackSummary::new();
+        let summary = TestSummary::new();
 
         let mut last_time = summary.time_passed();
         for _ in 0..50 {
@@ -107,7 +107,7 @@ mod tests {
 
     #[test]
     fn is_correct_initial_value() {
-        let summary = AttackSummary::new();
+        let summary = TestSummary::new();
 
         assert_eq!(summary.megabytes_sent(), 0);
         assert_eq!(summary.packets_sent(), 0);
@@ -116,7 +116,7 @@ mod tests {
 
     #[test]
     fn ordinary_updates_work() {
-        let mut summary = AttackSummary::new();
+        let mut summary = TestSummary::new();
 
         summary.update(1024 * 1024 * 23, 2698);
         assert_eq!(summary.megabytes_sent(), 23);
@@ -129,13 +129,13 @@ mod tests {
 
     #[test]
     fn truncates_megabytes_correctly() {
-        let mut summary = AttackSummary::new();
+        let mut summary = TestSummary::new();
 
         summary.update(1024 * 1023, 5338);
         assert_eq!(
             summary.megabytes_sent(),
             0,
-            "'AttackSummary' truncates megabytes incorrectly"
+            "'TestSummary' truncates megabytes incorrectly"
         );
         assert_eq!(summary.packets_sent(), 5338);
 
@@ -146,25 +146,25 @@ mod tests {
 
     #[test]
     fn zero_update_works() {
-        let mut summary = AttackSummary::new();
+        let mut summary = TestSummary::new();
         summary.update(1024 * 1024 * 85, 2698);
 
         summary.update(0, 0);
         assert_eq!(
             summary.megabytes_sent(),
             85,
-            "'AttackSummary' hasn't the same megabytes after zero-update"
+            "'TestSummary' hasn't the same megabytes after zero-update"
         );
         assert_eq!(
             summary.packets_sent(),
             2698,
-            "'AttackSummary' hasn't the same packets after zero-update"
+            "'TestSummary' hasn't the same packets after zero-update"
         );
     }
 
     #[test]
     fn time_passed_works() {
-        let mut summary = AttackSummary::new();
+        let mut summary = TestSummary::new();
 
         // Wait for a little time because the test fails without it
         sleep(Duration::from_millis(10));

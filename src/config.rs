@@ -57,7 +57,7 @@ pub struct ArgsConfig {
     pub sender: SocketAddr,
 
     /// A program working time. The default value is too big, that
-    /// is, an attack will be performed until you explicitly stop
+    /// is, a test will be performed until you explicitly stop
     /// the process.
     #[structopt(
         short = "d",
@@ -70,7 +70,7 @@ pub struct ArgsConfig {
     pub duration: Duration,
 
     /// A size of each UDP-packet, specified in bytes. Note that
-    /// your system or a victim server might not be able to handle
+    /// your system or a target server might not be able to handle
     /// the default value.
     #[structopt(
         short = "l",
@@ -82,8 +82,8 @@ pub struct ArgsConfig {
     )]
     pub length: NonZeroUsize,
 
-    /// A waiting time before an attack execution. It is mainly
-    /// used to prevent a launch of an erroneous (unwanted) attack.
+    /// A waiting time before a test execution. It is mainly
+    /// used to prevent a launch of an erroneous (unwanted) test.
     #[structopt(
         short = "w",
         long = "wait",
@@ -106,7 +106,7 @@ pub struct ArgsConfig {
     )]
     pub send_periodicity: Duration,
 
-    /// A count of packets per displaying attack summaries. It is
+    /// A count of packets per displaying test summaries. It is
     /// not recommended to set this option to a small value (say, 6)
     /// for the performance reasons.
     #[structopt(
