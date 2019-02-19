@@ -96,4 +96,4 @@ To make code easy to read for any contributor, there is a great tool called [rus
 
 ## Useful links
  - [Discussion on Reddit](https://www.reddit.com/r/rust/comments/arwi3v/anevicon_the_most_powerful_udpbased_load/)
- - [ProjectHunt description](https://www.producthunt.com/posts/anevicon)
+ - [ProductHunt description](https://www.producthunt.com/posts/anevicon)
