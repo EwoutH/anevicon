@@ -99,4 +99,4 @@ To make code easy to read for any contributor, there is a great tool called [rus
  - [ProductHunt description](https://www.producthunt.com/posts/anevicon)
 
 ## Contacts
-This product is originally implemented and still maintained by [Temirkhan Myrzamadi](https://github.com/Gymmasssorla). You can just ask me for any question, suggestion or permission on my [email](mailto:gymmasssorla@gmail.com). I will try to answer you soon, but not worry if you don't receive an answer on the same day.
+This product is originally implemented and still maintained by [Temirkhan Myrzamadi](https://github.com/Gymmasssorla). You can ask me for any question, suggestion or permission on my [email](mailto:gymmasssorla@gmail.com). I will try to answer you soon, but not worry if you don't receive an answer on the same day.
