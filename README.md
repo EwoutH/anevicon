@@ -83,7 +83,7 @@ Since Anevicon is a free (in sense of freedom) kind of software, you are always 
 
  - **[Issues](https://github.com/Gymmasssorla/anevicon/issues)** are meant for reporting found bugs, errors, and maybe grammar mistakes. You can also push your issues to suggest new functionality in what you interested in. Discussions are welcome too, and I will try to answer you in near future.
  
- - **[Pulls](https://github.com/Gymmasssorla/anevicon/pulls)** are mean for implementing new functionality, fixing bugs, errors, and maybe grammar mistakes. You can suggest your work without asking for permission or any other coordination. Other people can criticize your code, and you should answer them.
+ - **[Pulls](https://github.com/Gymmasssorla/anevicon/pulls)** are meant for implementing new functionality, fixing bugs, errors, and maybe grammar mistakes. You can suggest your work without asking for permission or any other coordination. Other people can criticize your code, and you should answer them.
  
 To make code easy to read for any contributor, there is a great tool called [rustfmt](https://github.com/rust-lang/rustfmt) by the original Rust team, which formats a whole project just in one command (`cargo fmt`). Please type this command before pushing any changes to this repository.
 
