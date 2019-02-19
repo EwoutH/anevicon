@@ -78,6 +78,15 @@ OPTIONS:
 For more information see <https://github.com/Gymmasssorla/anevicon>.
 ```
 
+## Contributing
+Since Anevicon is a free (in sense of freedom) kind of software, you are always welcome to contribute! Please look through our [code of conduct](https://github.com/Gymmasssorla/anevicon) and the liberal [GPLv3 license](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE), under which the product is distributed. Now let's discuss how to make your contribution productive:
+
+ - **[Issues](https://github.com/Gymmasssorla/anevicon/issues)** are meant for reporting found bugs, errors, and maybe grammar mistakes. You can also push your issues to suggest new functionality in what you interested in. Discussions are welcome too, and I will try to answer you in near future.
+ 
+ - **[Pulls](https://github.com/Gymmasssorla/anevicon/pulls)** are mean for implementing new functionality, fixing bugs, errors, and maybe grammar mistakes. You can suggest your work without asking for permission or any other coordination. Other people can criticize your code, and you should answer them.
+ 
+To make code easy to read for any contributor, there is a great tool called [rustfmt](https://github.com/rust-lang/rustfmt) by the original Rust team, which formats a whole project just in one command (`cargo fmt`). Please type this command before pushing any changes to this repository.
+
 ## Cautions
  - The goal of Anevicon is to produce the maximum possible (for the attacking system) load on the specified target address. Thereby, this **DOES NOT MEAN** that Anevicon will break **ABSOLUTELY ANY SERVER** while running on your computer.
  
