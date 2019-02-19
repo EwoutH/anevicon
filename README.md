@@ -42,16 +42,16 @@ FLAGS:
 
 OPTIONS:
         --display-periodicity <PACKETS>
-            A count of packets per displaying attack summaries. It is not
+            A count of packets per displaying test summaries. It is not
             recommended to set this option to a small value (say, 6) for the
             performance reasons. [default: 300]
     -d, --duration <TIME-SPAN>
-            A program working time. The default value is too big, that is, an
-            attack will be performed until you explicitly stop the process.
+            A program working time. The default value is too big, that is, a
+            test will be performed until you explicitly stop the process.
             [default: 64years 64hours 64secs]
     -l, --length <BYTES>
             A size of each UDP-packet, specified in bytes. Note that your system
-            or a victim server might not be able to handle the default value.
+            or a target server might not be able to handle the default value.
             [default: 65000]
     -p, --packets <COUNT>
             A count of packets for sending. The default value equals to the
@@ -72,8 +72,8 @@ OPTIONS:
             A sender of generated traffic, specified as an IP-address and a port
             number, separated by the colon character. [default: 0.0.0.0:0]
     -w, --wait <TIME-SPAN>
-            A waiting time before an attack execution. It is mainly used to
-            prevent a launch of an erroneous (unwanted) attack. [default: 5secs]
+            A waiting time before a test execution. It is mainly used to prevent
+            a launch of an erroneous (unwanted) test. [default: 5secs]
 
 For more information see <https://github.com/Gymmasssorla/anevicon>.
 ```
