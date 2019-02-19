@@ -94,9 +94,5 @@ To make code easy to read for any contributor, there is a great tool called [rus
  
  - Despite the fact that Anevicon is heavily tested both automatically and manually, does not mean that the author is responsible for any bug in his work. The program comes with **ABSOLUTELY NO WARRANTY**, see [the license disclaimer](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE#L589).
 
-## Useful links
- - [Discussion on Reddit](https://www.reddit.com/r/rust/comments/arwi3v/anevicon_the_most_powerful_udpbased_load/)
- - [ProductHunt description](https://www.producthunt.com/posts/anevicon)
-
 ## Contacts
 [Temirkhan Myrzamadi](https://github.com/Gymmasssorla) <[gymmasssorla@gmail.com](mailto:gymmasssorla@gmail.com)> (the author)
