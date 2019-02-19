@@ -88,7 +88,7 @@ Since Anevicon is a free (in sense of freedom) kind of software, you are always 
 To make code easy to read for any contributor, there is a great tool called [rustfmt](https://github.com/rust-lang/rustfmt) by the original Rust team, which formats a whole project just in one command (`cargo fmt`). Please type this command before pushing any changes to this repository.
 
 ## Contacts
-This product is originally based, implemented, and still maintained by [Temirkhan Myrzamadi](https://github.com/Gymmasssorla). You can just ask me for any question, suggestion or permission on my [email](mailto:gymmasssorla@gmail.com). I will try to answer you soon, but not worry if you don't receive an answer on the same day.
+This product is originally implemented and still maintained by [Temirkhan Myrzamadi](https://github.com/Gymmasssorla). You can just ask me for any question, suggestion or permission on my [email](mailto:gymmasssorla@gmail.com). I will try to answer you soon, but not worry if you don't receive an answer on the same day.
 
 ## Cautions
  - The goal of Anevicon is to produce the maximum possible (for the attacking system) load on the specified target address. Thereby, this **DOES NOT MEAN** that Anevicon will break **ABSOLUTELY ANY SERVER** while running on your computer.
