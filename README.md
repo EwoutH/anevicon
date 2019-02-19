@@ -17,7 +17,7 @@
   <img src="DEMO.gif"><br>
   
   Anevicon is a high-performance traffic generator, designed to be as convenient and reliable as it is possible. It sends
-numerous UDP-packets to a victim, thereby simulating an activity that can be produced by your end users or a
+numerous UDP-packets to a server, thereby simulating an activity that can be produced by your end users or a
 group of hackers.
 </div>
 
