@@ -107,7 +107,7 @@ Note that the test below will end when, and only when one of two specified end c
 $ anevicon --receiver 93.184.216.34:80 --length 4092
 ```
 
-There are also some of specific options implemented, for instance, `--display-periodicity` for specifying information displaying interval in packets, `--send-periodicity` for a time span between sending packets, `--send-timeout` to regulate a timeout used to send packets, and of course `--wait` safety option that sets a waiting time span at a start of a test.
+There are also some of specific options implemented, for instance, `--display-periodicity` for specifying information displaying interval in packets, `--send-periodicity` for a time span between sending packets, `--send-timeout` to regulate a timeout used to send an every single packet, and of course `--wait` safety option that sets a waiting time span at a start of a test.
 
 ## Contributing
 Since Anevicon is a free (in sense of freedom) kind of software, you are always welcome to contribute! Please look through our [code of conduct](https://github.com/Gymmasssorla/anevicon/blob/master/CODE_OF_CONDUCT.md) and the liberal [GPLv3 license](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE), under which the product is distributed. Now let's discuss how to make your contribution productive:
