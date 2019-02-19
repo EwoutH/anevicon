@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/badge/license-GPLv3-blue.svg">
   </a>
   <a href="https://crates.io/crates/anevicon">
-    <img src="https://img.shields.io/badge/crates.io-v0.1.0-orange.svg">
+    <img src="https://img.shields.io/badge/crates.io-v0.1.2-orange.svg">
   </a>
   
   <img src="DEMO.gif"><br>
