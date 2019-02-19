@@ -51,18 +51,28 @@ impl TestSummary {
         self.packets_sent
     }
 
-    pub fn time_passed(&self) -> Duration {
-        self.initial_time.elapsed()
-    }
-
-    pub fn megabytes_in_sec(&self) -> usize {
+    pub fn megabites_per_sec(&self) -> usize {
         let secs_passed = self.time_passed().as_secs() as usize;
 
         if secs_passed == 0 {
             0
         } else {
-            self.megabytes_sent() / secs_passed
+            (self.megabytes_sent() * 8) / secs_passed
         }
+    }
+
+    pub fn packets_per_sec(&self) -> usize {
+        let secs_passed = self.time_passed().as_secs() as usize;
+
+        if secs_passed == 0 {
+            0
+        } else {
+            self.packets_sent() / secs_passed
+        }
+    }
+
+    pub fn time_passed(&self) -> Duration {
+        self.initial_time.elapsed()
     }
 }
 
@@ -70,13 +80,13 @@ impl Display for TestSummary {
     fn fmt(&self, fmt: &mut Formatter) -> fmt::Result {
         write!(
             fmt,
-            "packets sent: {packets}, \
-             megabytes sent: {megabytes}, \
-             the average speed: {speed} MB/s, \
+            "packets sent: {packets} ({megabytes} MB), \
+             the average speed: {mbps} Mbps ({packets_per_sec} packets/sec), \
              time passed: {time_passed}",
             packets = self.packets_sent(),
             megabytes = self.megabytes_sent(),
-            speed = self.megabytes_in_sec(),
+            mbps = self.megabites_per_sec(),
+            packets_per_sec = self.packets_per_sec(),
             time_passed = format_duration(self.time_passed())
         )
     }
@@ -111,7 +121,8 @@ mod tests {
 
         assert_eq!(summary.megabytes_sent(), 0);
         assert_eq!(summary.packets_sent(), 0);
-        assert_eq!(summary.megabytes_in_sec(), 0);
+        assert_eq!(summary.megabites_per_sec(), 0);
+        assert_eq!(summary.packets_per_sec(), 0);
     }
 
     #[test]
