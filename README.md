@@ -4,6 +4,9 @@
   <a href="https://gitter.im/Gymmasssorla/anevicon">
     <img src="https://img.shields.io/badge/chat-on%20gitter-pink.svg">
   </a>
+  <a href="https://ci.appveyor.com/project/Gymmasssorla/anevicon">
+    <img src="https://ci.appveyor.com/api/projects/status/github/Gymmasssorla/anevicon?branch=master&svg=true">
+  </a>
   <a href="https://travis-ci.com/Gymmasssorla/anevicon">
     <img src="https://travis-ci.com/Gymmasssorla/anevicon.svg?branch=master">
   </a>
