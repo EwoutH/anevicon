@@ -78,6 +78,28 @@ OPTIONS:
 For more information see <https://github.com/Gymmasssorla/anevicon>.
 ```
 
+## Examples
+All you need is to provide the testing server address, which consists of an IP address and a port number, separated by the colon character. All sending sockets will have your local address, that is, IP spoofing technique is supported, but not totally required.
+
+```bash
+# Test the 80 port of the example.com site using your local address
+$ anevicon --receiver 93.184.216.34:80
+```
+
+As I said above, the IP spoofing technique is also supported. Using this technique, hackers can protect their bandwidth from server response messages and hide their real IP address. You can imitate it via the `--sender` command-line option, as described below:
+
+```bash
+# Test the 80 port of the example.com site using its own IP address
+$ anevicon --receiver 93.184.216.34:80 --sender 93.184.216.34:80
+```
+
+However, would be nice if you will be able to tell Anevicon an end condition for a running test and make it deterministic. In particular, there are two command-line options called `--duration` and `--packets` for specifying a duration and a packets count, respectively:
+
+```bash
+# Test the 80 port of the example.com site with the two limit options
+$ anevicon --receiver 93.184.216.34:80 --duration 3min --packets 7000
+```
+
 ## Contributing
 Since Anevicon is a free (in sense of freedom) kind of software, you are always welcome to contribute! Please look through our [code of conduct](https://github.com/Gymmasssorla/anevicon/blob/master/CODE_OF_CONDUCT.md) and the liberal [GPLv3 license](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE), under which the product is distributed. Now let's discuss how to make your contribution productive:
 
