@@ -93,7 +93,7 @@ Using the IP spoofing technique, hackers can protect their bandwidth from server
 $ anevicon --receiver 93.184.216.34:80 --sender 93.184.216.34:80
 ```
 
-To make your test deterministic, there are two command-line options called `--duration` and `--packets` for specifying end conditions for a future running test (a duration and a packets count, respectively):
+Note that the command above might not work on your system due to the security reasons. To make your test deterministic, there are two options called `--duration` and `--packets` for specifying end conditions for a future running test (a duration and a packets count, respectively):
 
 ```bash
 # Test the 80 port of the example.com site with the two limit options
