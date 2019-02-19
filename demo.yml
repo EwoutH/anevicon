@@ -111,37 +111,37 @@ config:
 
 # Records, feel free to edit them
 records:
-  - delay: 456
-    content: "\e]0;gymmasssorla@gymmasssorla-desktop:/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]7;file://gymmasssorla-desktop/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]0;gymmasssorla@gymmasssorla-desktop: /media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e[01;32mgymmasssorla@gymmasssorla-desktop\e[00m:\e[01;34m/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\e[00m$ "
-  - delay: 1304
-    content: "anevicon --\r-receiver 46.51.179.90:80 --duration 12s --wait 3s --display-periodicity 200"
-  - delay: 30
-    content: "\r\n[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:06 +0600\e[0m]: The program is starting to test with receiver: 46.51.179.90:80, sender: 0.0.0.0:0, duration: 12s, length: 65000, wait: 3s, send-periodicity: 0s, display-periodicity: 200, packets: 18446744073709551615, send-timeout: infinity, debug: false.\r\n"
+  - delay: 345
+    content: "\e]0;gymmasssorla@gymmasssorla-desktop:/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]7;file://gymmasssorla-desktop/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]0;gymmasssorla@gymmasssorla-desktop: /media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e[01;32mgymmasssorla@gymmasssorla-desktop\e[00m:\e[01;34m/media/gymmasssorla/772CF8924BEBB279/Documents/\r/anevicon\e[00m$ "
+  - delay: 1132
+    content: "anevicon --receiver 93.184.216.34:80 --wait 3s --duration 12s --displa\ray-periodicity 200"
+  - delay: 236
+    content: "\r\n[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:47 +0600\e[0m]: The program is starting to test with receiver: 93.184.216.34:80, sender: 0.0.0.0:0, duration: 12s, length: 65000, wait: 3s, send-periodicity: 0s, display-periodicity: 200, packets: 18446744073709551615, send-timeout: infinity, debug: false.\r\n"
   - delay: 4073
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:10 +0600\e[0m]: The test is running with packets sent: 200, megabytes sent: 12, the average speed: 12 MB/s, time passed: 1s 72ms 619us 524ns.\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:11 +0600\e[0m]: The test is running with packets sent: 400, megabytes sent: 24, the average speed: 12 MB/s, time passed: 2s 156ms 570us 407ns.\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:13 +0600\e[0m]: The test is running with packets sent: 600, megabytes sent: 37, the average speed: 12 MB/s, time passed: 3s 240ms 386us 91ns.\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:14 +0600\e[0m]: The test is running with packets sent: 800, megabytes sent: 49, the average speed: 12 MB/s, time passed: 4s 323ms 967us 672ns.\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:15 +0600\e[0m]: The test is running with packets sent: 1000, megabytes sent: 61, the average speed: 12 MB/s, time passed: 5s 407ms 782us 892ns.\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:51 +0600\e[0m]: The test is running with packets sent: 200 (12 MB), the average speed: 96 Mbps (200 packets/sec), time passed: 1s 72ms 803us 870ns.\r\n"
   - delay: 1083
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:16 +0600\e[0m]: The test is running with packets sent: 1200, megabytes sent: 74, the average speed: 12 MB/s, time passed: 6s 491ms 521us 848ns.\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:52 +0600\e[0m]: The test is running with packets sent: 400 (24 MB), the average speed: 96 Mbps (200 packets/sec), time passed: 2s 156ms 555us 933ns.\r\n"
   - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:17 +0600\e[0m]: The test is running with packets sent: 1400, megabytes sent: 86, the average speed: 12 MB/s, time passed: 7s 575ms 484us 73ns.\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:53 +0600\e[0m]: The test is running with packets sent: 600 (37 MB), the average speed: 98 Mbps (200 packets/sec), time passed: 3s 240ms 275us 883ns.\r\n"
   - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:18 +0600\e[0m]: The test is running with packets sent: 1600, megabytes sent: 99, the average speed: 12 MB/s, time passed: 8s 659ms 107us 877ns.\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:54 +0600\e[0m]: The test is running with packets sent: 800 (49 MB), the average speed: 98 Mbps (200 packets/sec), time passed: 4s 324ms 189us 292ns.\r\n"
   - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:19 +0600\e[0m]: The test is running with packets sent: 1800, megabytes sent: 111, the average speed: 12 MB/s, time passed: 9s 742ms 986us 464ns.\r\n"
-  - delay: 1084
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:20 +0600\e[0m]: The test is running with packets sent: 2000, megabytes sent: 123, the average speed: 12 MB/s, time passed: 10s 826ms 753us 402ns.\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:55 +0600\e[0m]: The test is running with packets sent: 1000 (61 MB), the average speed: 97 Mbps (200 packets/sec), time passed: 5s 407ms 860us 224ns.\r\n"
   - delay: 1083
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:21 +0600\e[0m]: The test is running with packets sent: 2200, megabytes sent: 136, the average speed: 12 MB/s, time passed: 11s 910ms 402us 577ns.\r\n"
-  - delay: 98
-    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/17/19 23:07:21 +0600\e[0m]: The program is stopping the packet sending because the allotted time has passed. The total result is: packets sent: 2218, megabytes sent: 137, the average speed: 11 MB/s, time passed: 12s 8ms 109us 86ns.\r\n"
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:56 +0600\e[0m]: The test is running with packets sent: 1200 (74 MB), the average speed: 98 Mbps (200 packets/sec), time passed: 6s 491ms 637us 758ns.\r\n"
+  - delay: 1083
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:57 +0600\e[0m]: The test is running with packets sent: 1400 (86 MB), the average speed: 98 Mbps (200 packets/sec), time passed: 7s 575ms 484us 474ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:42:59 +0600\e[0m]: The test is running with packets sent: 1600 (99 MB), the average speed: 99 Mbps (200 packets/sec), time passed: 8s 659ms 152us 545ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:43:00 +0600\e[0m]: The test is running with packets sent: 1800 (111 MB), the average speed: 98 Mbps (200 packets/sec), time passed: 9s 743ms 104us 461ns.\r\n"
+  - delay: 1083
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:43:01 +0600\e[0m]: The test is running with packets sent: 2000 (123 MB), the average speed: 98 Mbps (200 packets/sec), time passed: 10s 826ms 661us 586ns.\r\n"
+  - delay: 1084
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:43:02 +0600\e[0m]: The test is running with packets sent: 2200 (136 MB), the average speed: 98 Mbps (200 packets/sec), time passed: 11s 910ms 619us 760ns.\r\n"
+  - delay: 97
+    content: "[\e[1;35manevicon\e[0m] \e[4m\e[32mINFO\e[0m\e[4m\e[0m [\e[36m02/19/19 20:43:02 +0600\e[0m]: The program is stopping the packet sending because the allotted time has passed. The total result is: packets sent: 2218 (137 MB), the average speed: 91 Mbps (184 packets/sec), time passed: 12s 8ms 165us 838ns.\r\n"
   - delay: 6
-    content: "\e]0;gymmasssorla@gymmasssorla-desktop:/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]7;file://gymmasssorla-desktop/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]0;gymmasssorla@gymmasssorla-desktop: /media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e[01;32mgymmasssorla@gymmasssorla-desktop\e[00m:\e[01;34m/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\e[00m$ "
-  - delay: 464
+    content: "\e]0;gymmasssorla@gymmasssorla-desktop:/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]7;file://gymmasssorla-desktop/media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e]0;gymmasssorla@gymmasssorla-desktop: /media/gymmasssorla/772CF8924BEBB279/Documents/anevicon\a\e[01;32mgymmasssorla@gymmasssorla-desktop\e[00m:\e[01;34m/media/gymmasssorla/772CF8924BEBB279/Documents/\r/anevicon\e[00m$ "
+  - delay: 450
     content: "logout\r\n"
