@@ -121,8 +121,6 @@ mod tests {
 
         assert_eq!(summary.megabytes_sent(), 0);
         assert_eq!(summary.packets_sent(), 0);
-        assert_eq!(summary.megabites_per_sec(), 0);
-        assert_eq!(summary.packets_per_sec(), 0);
     }
 
     #[test]
