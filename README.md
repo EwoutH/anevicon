@@ -79,7 +79,7 @@ For more information see <https://github.com/Gymmasssorla/anevicon>.
 ```
 
 ## Contributing
-Since Anevicon is a free (in sense of freedom) kind of software, you are always welcome to contribute! Please look through our [code of conduct](https://github.com/Gymmasssorla/anevicon) and the liberal [GPLv3 license](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE), under which the product is distributed. Now let's discuss how to make your contribution productive:
+Since Anevicon is a free (in sense of freedom) kind of software, you are always welcome to contribute! Please look through our [code of conduct](https://github.com/Gymmasssorla/anevicon/blob/master/CODE_OF_CONDUCT.md) and the liberal [GPLv3 license](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE), under which the product is distributed. Now let's discuss how to make your contribution productive:
 
  - **[Issues](https://github.com/Gymmasssorla/anevicon/issues)** are meant for reporting found bugs, errors, and maybe grammar mistakes. You can also push your issues to suggest new functionality in what you interested in. Discussions are welcome too, and I will try to answer you in near future.
  
