@@ -79,8 +79,7 @@ For more information see <https://github.com/Gymmasssorla/anevicon>.
 ```
 
 ## Examples
- You can get the description of all the command-line options by running the `anevicon --help` command in your terminal.
- 
+
 ### Minimal command
 All you need is to provide the testing server address, which consists of an IP address and a port number, separated by the colon character. By default, all sending sockets will have your local address:
 
