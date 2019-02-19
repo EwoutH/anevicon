@@ -79,26 +79,35 @@ For more information see <https://github.com/Gymmasssorla/anevicon>.
 ```
 
 ## Examples
-All you need is to provide the testing server address, which consists of an IP address and a port number, separated by the colon character. All sending sockets will have your local address, that is, IP spoofing technique is supported, but not totally required.
+All you need is to provide the testing server address, which consists of an IP address and a port number, separated by the colon character. By default, all sending sockets will have your local address:
 
 ```bash
 # Test the 80 port of the example.com site using your local address
 $ anevicon --receiver 93.184.216.34:80
 ```
 
-As I said above, the IP spoofing technique is also supported. Using this technique, hackers can protect their bandwidth from server response messages and hide their real IP address. You can imitate it via the `--sender` command-line option, as described below:
+Using the IP spoofing technique, hackers can protect their bandwidth from server response messages and hide their real IP address. You can imitate it via the `--sender` command-line option, as described below:
 
 ```bash
 # Test the 80 port of the example.com site using its own IP address
 $ anevicon --receiver 93.184.216.34:80 --sender 93.184.216.34:80
 ```
 
-However, would be nice if you will be able to tell Anevicon an end condition for a running test and make it deterministic. In particular, there are two command-line options called `--duration` and `--packets` for specifying a duration and a packets count, respectively:
+To make your test deterministic, there are two command-line options called `--duration` and `--packets` for specifying end conditions for a future running test (a duration and a packets count, respectively):
 
 ```bash
 # Test the 80 port of the example.com site with the two limit options
 $ anevicon --receiver 93.184.216.34:80 --duration 3min --packets 7000
 ```
+
+Note that the test below will end when, and only when one of two specified end conditions become true. And what is more, you can specify a global packet length in bytes:
+
+```bash
+# Test the 80 port of example.com with the packet length of 4092 bytes
+$ anevicon --receiver 93.184.216.34:80 --length 4092
+```
+
+There are also some of specific options implemented, for instance, `--display-periodicity` for specifying information displaying interval in packets, `--send-periodicity` for a time span between sending packets, `--send-timeout` to regulate a timeout used to send packets, and of course `--wait` safety option that sets a waiting time span at a start of a test.
 
 ## Contributing
 Since Anevicon is a free (in sense of freedom) kind of software, you are always welcome to contribute! Please look through our [code of conduct](https://github.com/Gymmasssorla/anevicon/blob/master/CODE_OF_CONDUCT.md) and the liberal [GPLv3 license](https://github.com/Gymmasssorla/anevicon/blob/master/LICENSE), under which the product is distributed. Now let's discuss how to make your contribution productive:
